@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="Mmear">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Mmear">
+    
+    <meta name="keywords" content="Mmear's BLOG,Mmear">
+    
+    <meta name="description" content="">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Vue学习笔记（二）:变化侦测原理 · Mmear&#39;s Factory</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href="/assets/my_favicon.ico">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin="">
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin="">
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/">Mmear&#39;s 😘.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Vue学习笔记（二）:变化侦测原理</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href="/">Mmear's 😘.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/03.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Vue学习笔记（二）:变化侦测原理
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class="post-intro-tags">
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="Javascript">Javascript</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="Vue">Vue</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">1.9k</span>阅读时长: <span class="post-count reading-time">7 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2018/11/16</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="Vue-中的-MVVM"><a href="#Vue-中的-MVVM" class="headerlink" title="Vue 中的 MVVM"></a>Vue 中的 MVVM</h2><p>本篇文章很大一部分参考了<a href="https://github.com/berwin/Blog/issues/17" target="_blank" rel="noopener">Vue 变化检测原理(作者：berwin)</a>这篇文章，并对其中一部分代码和表述进行了修改；</p>
+<h3 id="为什么是-MVVM"><a href="#为什么是-MVVM" class="headerlink" title="为什么是 MVVM?"></a>为什么是 MVVM?</h3><p>曾经，在<code>MVC</code>架构下，前端开发者会遇到三个主要问题：</p>
+<blockquote>
+<ul>
+<li>需要直接操作 DOM 以更新数据，调用大量相同的 API，操作繁琐重复；</li>
+<li>当<code>model</code>改变数据时，需要手动更新至<code>view</code>中；当用户操作改变<code>view</code>时，也需要将变化的数据同步至<code>model</code>中，在大型应用中，数据的状态及同步是相当复杂多变，难以维护的；</li>
+<li>大量 DOM 操作使得页面渲染性能降低，影响用户体验</li>
+</ul>
+</blockquote>
+<p><code>MVVM</code>的出现有效解决了前两个问题，而最后一个问题也因为 Google 推出的 v8 引擎对 Javascript 的高效处理而得到缓解:</p>
+<p>在<code>MVVM</code>架构中，<code>view</code>代表着视图、模板，将模型/数据以定义好的方式展示出来，<code>model</code>代表着模型/数据，可以在其中定义<strong>数据修改</strong>及<strong>业务逻辑</strong>，<code>viewModel</code>负责在<code>model</code>与<code>view</code>中间的通信，也就是建立一个数据与视图的<strong>数据双向绑定</strong>机制；因此<code>view</code>中的数据变化会更新到<code>model</code>中，而<code>model</code>中对数据的修改也会立刻反应在视图中；</p>
+<p>在<code>MVVM</code>架构下，开发者无需关心视图层的数据操作，只需关注具体的业务逻辑，<code>viewModel</code>会自动实现<code>view</code>与<code>model</code>中的数据同步；</p>
+<img src="/2018/11/16/vue学习笔记（二）-变化监测原理/MVVMPattern.png" title="由Ugaya40CC BY-SA 3.0，https://commons.wikimedia.org/w/index.php?curid=19056842">
+<h3 id="Vue-与-MVVM-的关系"><a href="#Vue-与-MVVM-的关系" class="headerlink" title="Vue 与 MVVM 的关系?"></a>Vue 与 MVVM 的关系?</h3><p><code>Vue.js</code>是一个典型的<code>MVVM</code>风格的框架，它主要专注于其中的<code>viewModel</code>部分，实现了数据双向绑定以及响应式的数据更新:</p>
+<blockquote>
+<p>Vue 最独特的特性之一，是其<strong>非侵入性</strong>的响应式系统。数据模型仅仅是普通的 JavaScript 对象。而当你修改它们时，视图会进行更新。</p>
+</blockquote>
+<p>如果以一个单组件<code>.vue</code>为例的话，template 部分就相当于视图层，data 部分相当于<code>model</code>，而该文件生成的 Vue 实例则相当于<code>viewModel</code>了；</p>
+<h2 id="Vue-的响应式原理-变化侦测原理"><a href="#Vue-的响应式原理-变化侦测原理" class="headerlink" title="Vue 的响应式原理/变化侦测原理"></a>Vue 的响应式原理/变化侦测原理</h2><p>Javascript 中监测变化有两种方法，一是<code>Object.defineProperty</code>，二是 ES6 中的<code>Proxy</code>；Vue 主要通过<code>Object.defineProperty</code>方法并结合观察者模式(observer pattern)实现变化侦测(change detection)：当一个普通的数据对象被传给 Vue 实例的<code>data</code>选项，Vue 会<strong>遍历</strong>该对象的所有属性，并用<code>Object.defineProperty</code>把这些属性全转化为<code>getter</code>与<code>setter</code>:<br><img src="/2018/11/16/vue学习笔记（二）-变化监测原理/data.png" title="change and its detect"></p>
+<p>每个 Vue 实例都维护着一个<code>watcher</code>，它会收集组件渲染时需要的属性作为<strong>依赖</strong>，当视图层或数据层调用了某个依赖项的<code>setter</code>，Vue 便会通知<code>watcher</code>重新渲染(re-render)，调用组件渲染函数，更新关联的组件；</p>
+<h3 id="实现简单的变化侦测"><a href="#实现简单的变化侦测" class="headerlink" title="实现简单的变化侦测"></a>实现简单的变化侦测</h3><p>开始前，首先需要考虑一个问题：</p>
+<h4 id="如何侦测到变化？"><a href="#如何侦测到变化？" class="headerlink" title="如何侦测到变化？"></a>如何侦测到变化？</h4><p>这个问题上面已经解释过了，使用<code>Object.definePropery</code>，通过其中的<code>setter</code>便能监测到变化；但我们可以对其进行简单的封装：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">definePropety</span> (<span class="params">obj, key, val</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    configurable: <span class="literal">true</span>,</span><br><span class="line">    get () &#123; <span class="keyword">return</span> val; &#125;,</span><br><span class="line">    set (newVal) &#123;</span><br><span class="line">      <span class="keyword">if</span> (newVal !== val) &#123;</span><br><span class="line">        <span class="comment">// 这里的val相当于值本身</span></span><br><span class="line">        <span class="comment">// 不能写成 this[key] = newVal, 会使setter递归调用导致栈溢出</span></span><br><span class="line">        val = newVal;</span><br><span class="line">        <span class="comment">// do something...</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line">defineProperty(obj, <span class="string">'t'</span>, <span class="number">1</span>);</span><br><span class="line">obj.t = <span class="number">2</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj.t); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure></p>
+<p><del>虽然看起来很厉害，但好像没什么用呢</del>，东西都准备好了，下一步就是收集依赖了，既然是响应式，我们就需要知道谁使用了这个属性，并将它加入<code>watcher</code>的通知名单中，这样<code>setter</code>被调用后，只要按照名单一个个通知(notify)即可；那么如何收集依赖呢？</p>
+<h4 id="如何收集依赖？"><a href="#如何收集依赖？" class="headerlink" title="如何收集依赖？"></a>如何收集依赖？</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    &#123;&#123; key &#125;&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;&#123; key &#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="undefined">  data () &#123;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">return</span> &#123; <span class="attr">key</span>: <span class="number">1</span> &#125;</span></span><br><span class="line"><span class="undefined">  &#125;,</span></span><br><span class="line"><span class="undefined">  watch: &#123;</span></span><br><span class="line"><span class="javascript">    key (<span class="keyword">new</span>, val) &#123;</span></span><br><span class="line"><span class="javascript">      <span class="comment">// do something...</span></span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">  &#125;</span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>模板中调用了<code>key</code>属性的地方，就是需要进行<strong>依赖收集</strong>的地方，按照一开始所说的，还有个<code>getter</code>访问器属性没用上，那自然是在调用<code>getter</code>时收集依赖并存放进<code>watcher</code>中了；假设我们的<code>key</code>属性调用是一个函数，存在于<code>window.target</code>属性上，那可以对<code>key</code>维护一个数组，用来存储这个属性所有的依赖；所以需要对之前的<code>defineProperty</code>函数修改一下了：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">defineReactive</span> (<span class="params">obj, key, val</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> dependency = []; <span class="comment">// 存放依赖的地方</span></span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    configurable: <span class="literal">true</span>,</span><br><span class="line">    get () &#123; </span><br><span class="line">      dependency.push(<span class="built_in">window</span>.target); <span class="comment">// 收集依赖</span></span><br><span class="line">      <span class="keyword">return</span> val; </span><br><span class="line">    &#125;,</span><br><span class="line">    set (newVal) &#123;</span><br><span class="line">      <span class="keyword">if</span> (newVal !== val) &#123;</span><br><span class="line">        val = newVal;</span><br><span class="line">        <span class="comment">// notify the wather 触发依赖</span></span><br><span class="line">        <span class="keyword">for</span> (watcher <span class="keyword">of</span> dependency) &#123;</span><br><span class="line">          watcher(val, newVal);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这段代码存在着耦合，依赖收集的功能应该独立出来。我们可以将依赖收集过程抽象成一个具体的类<code>Dep</code>，每个属性是<code>Dep</code>的一个实例：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="comment">// static target: ?Watcher;</span></span><br><span class="line">  <span class="comment">// id: number;</span></span><br><span class="line">  <span class="comment">// subs: Array&lt;Watcher&gt;;</span></span><br><span class="line">  <span class="keyword">static</span> target; <span class="comment">// 类静态属性，可以通过类直接访问设置</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">constructor</span> () &#123;</span><br><span class="line">    <span class="keyword">this</span>.id = uid++;</span><br><span class="line">    <span class="keyword">this</span>.subs = [];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 添加依赖</span></span><br><span class="line">  addSub (sub) &#123;</span><br><span class="line">    <span class="keyword">this</span>.subs.push(sub)</span><br><span class="line">  &#125;,</span><br><span class="line">  removeSub (sub) &#123;</span><br><span class="line">    <span class="comment">// TODO</span></span><br><span class="line">  &#125;,</span><br><span class="line">  depend () &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.target <span class="keyword">instanceof</span> Watcher) &#123;</span><br><span class="line">      <span class="keyword">this</span>.addSub(<span class="keyword">this</span>.target);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  notify () &#123;</span><br><span class="line">    <span class="comment">// stabilize the subscriber list first</span></span><br><span class="line">    <span class="keyword">const</span> subs = <span class="keyword">this</span>.subs.slice();</span><br><span class="line">    <span class="keyword">for</span> (sub <span class="keyword">of</span> subs) &#123;</span><br><span class="line">      subs.update();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 修改defineReactive函数中的耦合部分</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">defineReactive</span> (<span class="params">obj, key, val</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> dependency = <span class="keyword">new</span> Dep() <span class="comment">// 存放依赖的地方</span></span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    configurable: <span class="literal">true</span>,</span><br><span class="line">    get () &#123; </span><br><span class="line">      dependency.depend(Dep.target); <span class="comment">// 收集依赖</span></span><br><span class="line">      <span class="keyword">return</span> val; </span><br><span class="line">    &#125;,</span><br><span class="line">    set (newVal) &#123;</span><br><span class="line">      <span class="keyword">if</span> (newVal !== val) &#123;</span><br><span class="line">        val = newVal;</span><br><span class="line">        <span class="comment">// notify the wather 触发依赖</span></span><br><span class="line">        dependency.notify();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中，我们要求实例的<code>target</code>属性为<code>Watcher</code>的实例；<code>subs</code>属性是<code>Watcher</code>类的数组；</p>
+<h4 id="watcher是什么？"><a href="#watcher是什么？" class="headerlink" title="watcher是什么？"></a>watcher是什么？</h4><p>虽然一直在提到<code>watcher</code>，但似乎并没有给他以明确的定义，我们可以根据他在<code>Dep</code>中的作用，得出他是一个存储属性依赖的对象；可以认为，收集依赖就是在收集<code>watcher</code>；而之所以需要抽象出一个<code>Watcher</code>类，是因为<strong>属性被使用的方式</strong>有很多，可能是在template中，也可能是在watch(如Vue中的watch选项)中：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vm.$watch(<span class="string">'key'</span>, (newVal, oldVal) =&gt; &#123; <span class="comment">/* ... */</span>&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>这段代码表示<code>key</code>属性发生变化时，会调用第二个参数中的回调；假设每个属性的watch都是一个实例，我们便能抽象出<code>Watch</code>类：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Wacher</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span> (expOrFn, cb) &#123;</span><br><span class="line">    <span class="comment">// parsePath用于解析路径(obj.key.name)</span></span><br><span class="line">    <span class="keyword">this</span>.getter = parsePath(expOrFn); </span><br><span class="line">    <span class="keyword">this</span>.cb = cb;</span><br><span class="line">    <span class="keyword">this</span>.value = <span class="keyword">this</span>.get();<span class="comment">// 读取vm.$data中的值，同时会触发属性上的getter</span></span><br><span class="line">  &#125;，</span><br><span class="line">  <span class="comment">// 获取</span></span><br><span class="line">  get () &#123;</span><br><span class="line">    Dep.target = <span class="keyword">this</span>; <span class="comment">// !!在这里将当前watcher绑定在Dep上</span></span><br><span class="line">    <span class="comment">// vm指当前的Vue实例</span></span><br><span class="line">    <span class="keyword">this</span>.value = <span class="keyword">this</span>.getter.call(vm, vm); </span><br><span class="line">    Dep.target = <span class="literal">null</span>;</span><br><span class="line">  &#125;,</span><br><span class="line">  update () &#123;</span><br><span class="line">    <span class="keyword">const</span> oldVal = <span class="keyword">this</span>.value;</span><br><span class="line">    <span class="keyword">this</span>.value = <span class="keyword">this</span>.get();</span><br><span class="line">    <span class="keyword">this</span>.cb.call(vm, <span class="keyword">this</span>.value, oldVal);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>每次实例化一个<code>Watcher</code>时，构造函数中都会调用该数据的<code>getter</code>，从而将当前实例/依赖添加进<code>Dep</code>实例的<code>subs</code>数组中；当把依赖注入到<code>Dep</code>后，每次的<code>setter</code>都会遍历依赖数组，调用每一个依赖的<code>update</code>方法，触发回调函数；</p>
+<blockquote>
+<p>其实不管是用户执行的 vm.$watch(‘key’, (value, oldValue) =&gt; {}) 还是模板中用到的data，都是通过 watcher 来通知自己是否需要发生变化的。</p>
+</blockquote>
+<hr>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><a href="https://cn.Vuejs.org/v2/guide/reactivity.html" target="_blank" rel="noopener">Vue.js 官方文档：深入 Vue 响应式原理</a></li>
+<li><a href="https://juejin.im/post/5b2f0769e51d45589f46949e" target="_blank" rel="noopener">Vue.js 中的 MVVM 原理</a></li>
+<li><a href="https://github.com/berwin/Blog/issues/17" target="_blank" rel="noopener">Vue 变化检测原理</a></li>
+</ul>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2018/11/16/vue学习笔记（三）-virtual DOM与渲染函数/" title="vue学习笔记（三）:virtural DOM 与渲染函数">
+                    <div class="nextTitle">vue学习笔记（三）:virtural DOM 与渲染函数</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2018/11/16/frontend-tech-list/" title="前端技术清单">
+                    <div class="prevTitle">前端技术清单</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+<div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        // id: "Vue学习笔记（二）:变化侦测原理", // 可选。默认为 location.href
+        owner: 'Mmear',
+        repo: 'CommentStore',
+        oauth: {
+            client_id: '9e5d5c9376725275ca12',
+            client_secret: '3372dc5a48e5997540bac640592ebc0beeec827c',
+        },
+    })
+    gitment.render('container')
+
+</script>
+
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:1049378949@qq.com" class="iconfont-archer email" title="email"></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/Mmear" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title="wechat">
+                  
+                  <img class="profile-qr" src="/assets/example_qr.png">
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="//juejin.im/user/5bbcca6ee51d4543e609a0ad" class="iconfont-archer juejin" target="_blank" title="juejin"></a>
+            
+        
+    
+        
+    
+        
+            
+                <a href="//space.bilibili.com/5641399/#/" class="iconfont-archer bilibili" target="_blank" title="bilibili"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Vue-中的-MVVM"><span class="toc-number">1.</span> <span class="toc-text">Vue 中的 MVVM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么是-MVVM"><span class="toc-number">1.1.</span> <span class="toc-text">为什么是 MVVM?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vue-与-MVVM-的关系"><span class="toc-number">1.2.</span> <span class="toc-text">Vue 与 MVVM 的关系?</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vue-的响应式原理-变化侦测原理"><span class="toc-number">2.</span> <span class="toc-text">Vue 的响应式原理/变化侦测原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#实现简单的变化侦测"><span class="toc-number">2.1.</span> <span class="toc-text">实现简单的变化侦测</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#如何侦测到变化？"><span class="toc-number">2.1.1.</span> <span class="toc-text">如何侦测到变化？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#如何收集依赖？"><span class="toc-number">2.1.2.</span> <span class="toc-text">如何收集依赖？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#watcher是什么？"><span class="toc-number">2.1.3.</span> <span class="toc-text">watcher是什么？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考资料"><span class="toc-number">2.2.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 14
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/16</span><a class="archive-post-title" href="/2018/11/16/vue学习笔记（三）-virtual DOM与渲染函数/">vue学习笔记（三）:virtural DOM 与渲染函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/16</span><a class="archive-post-title" href="/2018/11/16/vue学习笔记（二）-变化监测原理/">Vue学习笔记（二）:变化侦测原理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/16</span><a class="archive-post-title" href="/2018/11/16/frontend-tech-list/">前端技术清单</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/13</span><a class="archive-post-title" href="/2018/11/13/Something-in-vue/">vue学习笔记（一）:一些概念</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/27</span><a class="archive-post-title" href="/2018/10/27/Webpck4-从入门到出门/">webpack4: 从入门到出门</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/30</span><a class="archive-post-title" href="/2018/07/30/ES6-学习/">ES6 学习笔记（一）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/18</span><a class="archive-post-title" href="/2018/07/18/Git学习/">Git学习笔记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/07</span><a class="archive-post-title" href="/2018/04/07/JavaScript-Object-oriented/">JavaScript面向对象编程</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/02</span><a class="archive-post-title" href="/2018/04/02/JavaScript-that/">JavaScript中的this</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/31</span><a class="archive-post-title" href="/2018/03/31/JavaScript-prototype/">JavaScript原型</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/29</span><a class="archive-post-title" href="/2018/03/29/JavaScript-closure/">JavaScript闭包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/25</span><a class="archive-post-title" href="/2018/03/25/JavaScript-scope/">JavaScript作用域</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/25</span><a class="archive-post-title" href="/2018/03/25/JavaScript学习笔记目录/">JavaScript学习笔记目录</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/23</span><a class="archive-post-title" href="/2018/03/23/初识Hexo及遇到的问题/">初识Hexo及遇到的问题</a>
+        </li>
+    
+    </ul></div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="JavaScript"><span class="iconfont-archer">&#xe606;</span>JavaScript</span>
+    
+        <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
+    
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+    
+        <span class="sidebar-tag-name" data-tags="webpack"><span class="iconfont-archer">&#xe606;</span>webpack</span>
+    
+        <span class="sidebar-tag-name" data-tags="Hexo"><span class="iconfont-archer">&#xe606;</span>Hexo</span>
+    
+        <span class="sidebar-tag-name" data-tags="Vue"><span class="iconfont-archer">&#xe606;</span>Vue</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br>
+    1、请确保node版本大于6.2<br>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Mmear"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
