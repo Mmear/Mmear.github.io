@@ -447,7 +447,7 @@ height:50vh;
 <p><strong>第一步</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arrayFakeProto = <span class="built_in">Object</span>.create(<span class="built_in">Array</span>.prototype);</span><br></pre></td></tr></table></figure></p>
 <p><strong>第二步</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 需要改造的数组方法</span></span><br><span class="line"><span class="keyword">const</span> arrayMethods = [<span class="string">'push'</span>, <span class="string">'shift'</span>, <span class="string">'pop'</span>, <span class="string">'unshift'</span>, <span class="string">'slice'</span>, <span class="string">'sort'</span>, <span class="string">'reverse'</span>];</span><br><span class="line">arrayMethods.forEach(<span class="function"><span class="params">method</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 获取原始数组方法</span></span><br><span class="line">  <span class="keyword">const</span> original = arrayFakeProto[method];</span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(arrayFakeProto, method, &#123;</span><br><span class="line">    value (...args) &#123;</span><br><span class="line">      <span class="comment">// 调用这个方法时，打印出来</span></span><br><span class="line">      <span class="built_in">console</span>.log(method + <span class="string">" is called"</span>);</span><br><span class="line">      <span class="keyword">return</span> original.apply(<span class="keyword">this</span>, args);</span><br><span class="line">    &#125;,</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    writable: <span class="literal">true</span>,</span><br><span class="line">    configurable: <span class="literal">true</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 验证一下</span></span><br><span class="line"><span class="keyword">const</span> a = [];</span><br><span class="line"><span class="built_in">Object</span>.setPrototypeOf(a, arrayFakeProto);</span><br><span class="line">a.push(<span class="string">'a'</span>, <span class="string">'d'</span>); <span class="comment">// push is called</span></span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// a, d</span></span><br></pre></td></tr></table></figure></p>
 <p>在进行下一步之前，我们先把这整个变化侦测过程抽象成一个类<code>Observer</code>，它负责判断<code>obj[key]</code>的类型，并对其实现变化侦测；并且该类的实例将成为一个控制数据更新的有力工具；</p>
-<p>ps:</p>
+<p><strong>PS</strong></p>
 <ul>
 <li><blockquote>
 <p>问题1：Observer构造函数中对Dep的实例化与defineReactive中的重复是否有问题？</p>
@@ -798,6 +798,18 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 14
@@ -895,11 +907,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="webpack"><span class="iconfont-archer">&#xe606;</span>webpack</span>
     
+        <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
+    
         <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
         <span class="sidebar-tag-name" data-tags="Vue"><span class="iconfont-archer">&#xe606;</span>Vue</span>
-    
-        <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
     
         <span class="sidebar-tag-name" data-tags="Hexo"><span class="iconfont-archer">&#xe606;</span>Hexo</span>
     
