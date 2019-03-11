@@ -415,7 +415,7 @@ height:50vh;
 <p>但这并不能解决我们之前提到的绑定丢失的问题，除非我们把要绑定的对象和函数一起传进去，这就是<code>bind</code>函数存在的意义：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建一个简单的bind函数</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">6</span>;</span><br><span class="line"><span class="keyword">var</span> bind = <span class="function"><span class="keyword">function</span>(<span class="params">fn, obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> fn.call(obj);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> obj = &#123;<span class="attr">a</span>: <span class="number">1</span>&#125;;</span><br><span class="line"><span class="keyword">var</span> func = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.a;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> bar = bind(func, obj);</span><br><span class="line"><span class="built_in">console</span>.log(bar()); <span class="comment">//1</span></span><br></pre></td></tr></table></figure></p>
 <p>因为这个函数十分常用，所以ES5在<code>Function.prototype</code>中实现了这个<code>bind</code>方法，它返回一个硬绑定的新函数，这个函数会将你指定的参数设置为this的上下文并调用原始函数：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> add = <span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">this</span>.num + a + b);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    num: <span class="number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> add_in = add.bind(obj, <span class="number">3</span>);<span class="comment">//传入一个对象和预设参数值a，柯里化</span></span><br><span class="line"><span class="keyword">var</span> result = add_in(<span class="number">4</span>);<span class="comment">//传入参数b</span></span><br><span class="line"><span class="built_in">console</span>.log(result); <span class="comment">//6 + 3 + 4 = 13</span></span><br></pre></td></tr></table></figure></p>
 <h2 id="new绑定"><a href="#new绑定" class="headerlink" title="new绑定"></a>new绑定</h2><p>JavaScript中的<strong>new操作符</strong>看起来和普通的面向对象语言一样，使用new操作符可以调用一个”构造函数”并返回一个实例；实际上，在JS中，所有函数都可以使用new操作符，这个操作不会实例化什么类，它只是单纯地执行一系列<strong>操作的集合</strong>，然后返回一个对象罢了；</p>
-<p>使用new操作符来调用函数，或者说发生”构造调用时”，会自动执行下面的操作：</p>
+<p>使用new操作符来调用函数，会自动执行下面的操作：</p>
 <ol>
 <li>创建一个新对象；</li>
 <li>对这个对象进行<code>[[prototype]]</code>连接，指向函数原型；</li>
@@ -758,9 +758,34 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 14
+        Total : 15
         </div>
         <!-- search  -->
         
@@ -771,12 +796,26 @@ top:50vh;
     
     
     
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/11</span><a class="archive-post-title" href="/2019/03/11/前端跨域问题及解决方案/">[Untitled Post]</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
     <div class="archive-year"> 2018 </div>
     <ul class="year-list">
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">11/16</span><a class="archive-post-title" href="/2018/11/16/vue学习笔记（三）-virtual DOM与渲染函数/">vue学习笔记（三）:virtural DOM 与渲染函数</a>
+            <span class="archive-post-date">11/16</span><a class="archive-post-title" href="/2018/11/16/vue学习笔记（三）-模板编译原理/">vue学习笔记（三）:模板编译原理</a>
         </li>
     
     
@@ -853,15 +892,19 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
-        <span class="sidebar-tag-name" data-tags="webpack"><span class="iconfont-archer">&#xe606;</span>webpack</span>
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
         <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
     
-        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+        <span class="sidebar-tag-name" data-tags="Hexo"><span class="iconfont-archer">&#xe606;</span>Hexo</span>
+    
+        <span class="sidebar-tag-name" data-tags="webpack"><span class="iconfont-archer">&#xe606;</span>webpack</span>
+    
+        <span class="sidebar-tag-name" data-tags="前端"><span class="iconfont-archer">&#xe606;</span>前端</span>
+    
+        <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
     
         <span class="sidebar-tag-name" data-tags="Vue"><span class="iconfont-archer">&#xe606;</span>Vue</span>
-    
-        <span class="sidebar-tag-name" data-tags="Hexo"><span class="iconfont-archer">&#xe606;</span>Hexo</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>

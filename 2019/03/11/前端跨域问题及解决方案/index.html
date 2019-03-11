@@ -22,7 +22,7 @@
     <meta name="description" content="">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>前端技术清单 · Mmear&#39;s Factory</title>
+    <title>Mmear&#39;s Factory</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/">Mmear&#39;s 😘.</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">前端技术清单</a>
+                <a href="#" class="post-name"></a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            前端技术清单
+            [Untitled Post]
             <!-- 404 -->
             
         </h1>
@@ -266,18 +266,20 @@ height:50vh;
                 
                     <div class="post-intro-tags">
     
-        <a class="post-tag" href="javascript:void(0);" data-tags="Javascript">Javascript</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="前端">前端</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="HTTP">HTTP</a>
     
 </div>
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">229</span>阅读时长: <span class="post-count reading-time">1 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">1.9k</span>阅读时长: <span class="post-count reading-time">7 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2018/11/16</span>
+                    <span class="post-intro-time">2019/03/11</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -401,57 +403,55 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <p>最近看到了掘金上的一篇叫做”<a href="https://github.com/alienzhou/frontend-tech-list" target="_blank" rel="noopener">年终回顾，为你汇总一份「前端技术清单」</a>“的文章，感觉自己对前端的理解还是太肤浅狭隘了，所以把文章里面提到的前端技术点都列在这，当作类似”TODOS”的东西吧，之后写到的文章都挂在相应的知识点下面；<del>每天醒来都感觉有学不完的东西呢</del></p>
-<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><ul>
-<li>Javascript<ul>
-<li>Javascript基础运行机制</li>
-<li>V8引擎</li>
-<li>内存管理</li>
+        <h1 id="前端跨域问题"><a href="#前端跨域问题" class="headerlink" title="前端跨域问题"></a>前端跨域问题</h1><h2 id="什么是跨域"><a href="#什么是跨域" class="headerlink" title="什么是跨域"></a>什么是跨域</h2><p>跨域是指一个域下的文档或脚本试图去请求另一个域下的资源，这里跨域是广义的。</p>
+<ul>
+<li>资源的跳转：如 <code>&lt;a&gt;</code>标签超链接，重定向，表单提交等；</li>
+<li>资源的嵌入：<code>&lt;link&gt;、&lt;script&gt;、&lt;img&gt;、&lt;iframe&gt;</code>标签等；</li>
+<li>脚本请求：通过 JS 发起的 Ajax 请求，DOM 和 JS 对象的跨域操作灯等；</li>
 </ul>
-</li>
-<li>CSS</li>
-<li>浏览器<ul>
-<li>现代浏览器的工作原理</li>
+<p>通常所说的跨域是狭义的，是由浏览器同源策略限制的一类场景；</p>
+<h2 id="同源策略-Same-origin-policy"><a href="#同源策略-Same-origin-policy" class="headerlink" title="同源策略(Same origin policy)"></a>同源策略(Same origin policy)</h2><p>同源策略是浏览器最基本的安全策略，如果缺少了同源策略，浏览器很容易受到 XSS、CSFR 攻击；同源是指：如果<strong>协议、主机、端口</strong>对于两个页面是相同的，则两个页面是同源的；<br>下表是给出了对<a href="http://store.company.com/dir/page.html" target="_blank" rel="noopener">http://store.company.com:80</a>的同源检测：<br>| URL | 结果 | 原因 |<br>| — | :-: | –: |<br>|<a href="http://store.company.com/dir/inner/another.html" target="_blank" rel="noopener">http://store.company.com/dir/inner/another.html</a> | 成功 | 同一域名 |<br>|<a href="http://store.company.com/dir2/other.html" target="_blank" rel="noopener">http://store.company.com/dir2/other.html</a> | 成功 | 同一域名下不同文件夹 |<br>| <a href="https://store.company.com/secure.html" target="_blank" rel="noopener">https://store.company.com/secure.html</a> | 失败 | 不同的协议 ( https ) |<br>| <a href="http://store.company.com:81/dir/etc.html" target="_blank" rel="noopener">http://store.company.com:81/dir/etc.html</a>| 失败 | 不同的端口 ( 81 ) |<br>| <a href="http://news.company.com/dir/other.html" target="_blank" rel="noopener">http://news.company.com/dir/other.html</a> | 失败 | 主域相同，子域不同( news ) |<br>|<a href="http://news.company.com/dir/other.html" target="_blank" rel="noopener">http://news.company.com/dir/other.html</a>   | 失败    | 域名不同    |</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="主域相同的跨域"><a href="#主域相同的跨域" class="headerlink" title="主域相同的跨域"></a>主域相同的跨域</h3><p> <code>document.domain</code> + <code>iframe</code> 实现跨域</p>
+<h3 id="完全不同源的跨域（两个页面之间的通信）"><a href="#完全不同源的跨域（两个页面之间的通信）" class="headerlink" title="完全不同源的跨域（两个页面之间的通信）"></a>完全不同源的跨域（两个页面之间的通信）</h3><ol>
+<li>通过<code>location.hash</code>跨域</li>
+<li>通过<code>window.name</code>跨域</li>
+<li>HTML5 通过引入全新的跨文档通信 API<code>window.postMessage</code> 允许跨文档通信<br><img src="https://camo.githubusercontent.com/67de92bfdab7eaf9d25149e539ef5bc14a23ca1e/687474703a2f2f75706c6f61642d696d616765732e6a69616e7368752e696f2f75706c6f61645f696d616765732f333738393339392d326262313963396238666231623463332e706e673f696d6167654d6f6772322f6175746f2d6f7269656e742f7374726970253743696d61676556696577322f322f772f31323430" alt="Paste_Image.png"></li>
+</ol>
+<h3 id="AJAX-请求不同源的跨域"><a href="#AJAX-请求不同源的跨域" class="headerlink" title="AJAX 请求不同源的跨域"></a>AJAX 请求不同源的跨域</h3><h4 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h4><p> 通过 <code>JSONP</code>请求跨域，网页通过添加一个<script>元素，向服务器请求 JSON 数据，这种做法不受同源政策限制；服务器收到请求后，将数据放在一个指定名字的回调函数里传回来：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* client */</span></span><br><span class="line"><span class="comment">// 回调函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">cb</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> script = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</span><br><span class="line"><span class="comment">// 向服务器发送请求</span></span><br><span class="line">script.src = <span class="string">"/http://server.test/data?callback=cb"</span>;</span><br></pre></td></tr></table></figure>
+<p>服务器返回：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* server */</span></span><br><span class="line"><span class="keyword">var</span> querystring = <span class="built_in">require</span>(<span class="string">'querystring'</span>);</span><br><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> server = http.createServer();</span><br><span class="line"></span><br><span class="line">server.on(<span class="string">'request'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> params = qs.parse(req.url.split(<span class="string">'?'</span>)[<span class="number">1</span>]);</span><br><span class="line">    <span class="keyword">var</span> fn = params.callback;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// jsonp返回设置</span></span><br><span class="line">    res.writeHead(<span class="number">200</span>, &#123; <span class="string">'Content-Type'</span>: <span class="string">'text/javascript'</span> &#125;);</span><br><span class="line">    res.write(fn + <span class="string">'('</span> + <span class="built_in">JSON</span>.stringify(params) + <span class="string">')'</span>);</span><br><span class="line"></span><br><span class="line">    res.end();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.listen(<span class="string">'8080'</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h4><p>通过<code>WebSocket</code>跨域，是一种通信协议，不执行同源政策；</p>
+<h4 id="跨域资源共享-CORS-："><a href="#跨域资源共享-CORS-：" class="headerlink" title="跨域资源共享(CORS)："></a>跨域资源共享(CORS)：</h4><p>当一个资源请求一个其它域名的资源时会发起一个<strong>跨域HTTP请求(cross-origin HTTP request)</strong>。比如说，域名A的某 Web 应用通过<code>&lt;img&gt;</code> 标签引入了域名B的某图片资源，域名A的 Web 应用就会导致浏览器发起一个跨域 HTTP 请求。在当今的 Web 开发中，使用跨域 HTTP 请求加载各类资源（包括CSS、图片、JavaScript 脚本以及其它类资源），已经成为了一种普遍且流行的方式。</p>
+<p>众所周知，出于安全考虑，浏览器会拦截跨域请求的返回结果。比如，使用<code>XMLHttpRequest对象</code>和<code>Fetch</code>发起 HTTP 请求就必须遵守『同源策略』。 具体而言，Web 应用程序通过XMLHttpRequest对象或Fetch能且只能向同域名的资源发起 HTTP 请求，而不能向任何其它域名发起请求。<br><img src="https://camo.githubusercontent.com/fda7730bd8fec56a75af12e8e90dea72ff8fde35/687474703a2f2f75706c6f61642d696d616765732e6a69616e7368752e696f2f75706c6f61645f696d616765732f333738393339392d373765633065323264363564626535652e706e673f696d6167654d6f6772322f6175746f2d6f7269656e742f7374726970253743696d61676556696577322f322f772f31323430" alt="img"></p>
+<h5 id="简单请求"><a href="#简单请求" class="headerlink" title="简单请求"></a>简单请求</h5><p>所谓的简单，是指：</p>
+<ul>
+<li>只使用 <code>GET, HEAD</code> 或者<code>POST</code>请求方法。如果使用POST 向服务器端传送数据，则数据类型(Content-Type)只能是 <code>application/x-www-form-urlencoded, multipart/form-data 或 text/plain</code>中的一种；</li>
+<li>不会使用自定义请求头（类似于 X-Modified ）；</li>
 </ul>
-</li>
+<p><img src="https://camo.githubusercontent.com/b482a43830b2e42467888e87d3aed782377b7ea2/687474703a2f2f75706c6f61642d696d616765732e6a69616e7368752e696f2f75706c6f61645f696d616765732f333738393339392d623361356662306539306137393637302e706e673f696d6167654d6f6772322f6175746f2d6f7269656e742f7374726970253743696d61676556696577322f322f772f31323430" alt="cors_1.png"><br>浏览器在发送简单跨域请求时需加上<code>origin</code>请求头，标明站点来源；同时服务器需设置<code>Access-Control-Allow-Origin</code>响应头为『*』或指明的站点地址；</p>
+<h5 id="预请求"><a href="#预请求" class="headerlink" title="预请求"></a>预请求</h5><p>不同于上面讨论的简单请求，『预请求』要求必须先发送一个 <code>OPTIONS</code> 请求给目的站点，来查明这个跨站请求对于目的站点是不是安全可接受的。这样做，是因为跨站请求可能会对目的站点的数据造成破坏（POST 请求不具有幂等性）。 当请求具备以下条件，就会被当成预请求处理：</p>
+<ul>
+<li>请求以 GET, HEAD 或者 POST <strong>以外的方法</strong>发起请求。者，使用 POST，但请求数据为 application/x-www-form-urlencoded, multipart/form-data 或者 text/plain 以外的数据类型。比如说，用 POST 发送数据类型为 <code>application/xml 或者 text/xml</code>的 XML 数据；</li>
+<li>使用自请求头（比如添加诸如 X-PINGOTHER）</li>
 </ul>
-<h2 id="工程化工具"><a href="#工程化工具" class="headerlink" title="工程化工具"></a>工程化工具</h2><ul>
-<li>webpack<ul>
-<li>webpack核心概念<ul>
-<li><a href="https://mmear.github.io/2018/11/13/Webpck4-%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%87%BA%E9%97%A8/" target="_blank" rel="noopener">webpack4:从入门到出门</a></li>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> invocation = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line"><span class="keyword">var</span> url = <span class="string">'http://bar.other/resources/post-here/'</span>;</span><br><span class="line"><span class="keyword">var</span> body = <span class="string">'some messages'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">callOtherDomain</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(invocation)&#123;</span><br><span class="line">    invocation.open(<span class="string">'POST'</span>, url, <span class="literal">true</span>);</span><br><span class="line">    invocation.setRequestHeader(<span class="string">'X-PINGOTHER'</span>, <span class="string">'pingpong'</span>); <span class="comment">// 自定义请求头</span></span><br><span class="line">    invocation.setRequestHeader(<span class="string">'Content-Type'</span>, <span class="string">'application/xml'</span>); <span class="comment">// 发送XML数据</span></span><br><span class="line">    invocation.onreadystatechange = handler;</span><br><span class="line">    invocation.send(body); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上，以 XMLHttpRequest 创建了一个 POST 请求，为该请求添加了一个自定义请求头(X-PINGOTHER: pingpong)，并指定数据类型为 application/xml。所以，该请求是一个『预请求』形式的跨站请求。浏览器使用一个 OPTIONS 发送了一个『预请求』。Firefox 3.1 根据请求参数，决定需要发送一个『预请求』，来探明服务器端是否接受后续真正的请求。 OPTIONS 是 HTTP/1.1 里的方法，用来获取更多服务器端的信息，是一个不应该对服务器数据造成影响的方法。 随同 OPTIONS 请求，以下两个请求头一起被发送：</p>
+<pre><code>Access-Control-Request-Method: POST
+Access-Control-Request-Headers: X-PINGOTHER
+</code></pre><p>假设服务器成功响应返回部分信息如下：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> //表明服务器允许http://foo.example的请求</span><br><span class="line"><span class="attribute">Access-Control-Allow-Origin</span>: http://foo.example</span><br><span class="line"> //表明服务器可以接受POST, GET和 OPTIONS的请求方法</span><br><span class="line"><span class="attribute">Access-Control-Allow-Methods</span>: POST, GET, OPTIONS</span><br><span class="line">//传递一个可接受的自定义请求头列表。服务器也需要设置一个与浏览器对应。否则会报 Request header field X-Requested-With is not allowed by Access-Control-Allow-Headers in preflight response 的错误</span><br><span class="line"><span class="attribute">Access-Control-Allow-Headers</span>: X-PINGOTHER</span><br><span class="line">//告诉浏览器，本次“预请求”的响应结果有效时间是多久。在上面的例子里，1728000秒代表着20天内，浏览器在处理针对该服务器的跨站请求，都可以无需再发送“预请求”，只需根据本次结果进行判断处理。</span><br><span class="line"><span class="attribute">Access-Control-Max-Age</span>: 1728000</span><br></pre></td></tr></table></figure>
+<h5 id="附带凭证信息的请求"><a href="#附带凭证信息的请求" class="headerlink" title="附带凭证信息的请求"></a>附带凭证信息的请求</h5><p>XMLHttpRequest 和访问控制功能中最有趣的特性就是，<strong>发送凭证请求（HTTP Cookies和验证信息）</strong>的功能。一般而言，对于跨站请求，浏览器是不会发送凭证信息的。但如果将 XMLHttpRequest 的一个特殊标志位<code>withCredentials</code>设置为true，浏览器就将在请求中附带凭证信息。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//http://foo.example站点的脚本向http://bar.other站点发送一个GET请求，并设置了一个Cookies值</span></span><br><span class="line"><span class="keyword">var</span> invocation = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line"><span class="keyword">var</span> url = <span class="string">'http://bar.other/resources/credentialed-content/'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">callOtherDomain</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(invocation) &#123;</span><br><span class="line">    invocation.open(<span class="string">'GET'</span>, url, <span class="literal">true</span>);</span><br><span class="line">    invocation.withCredentials = <span class="literal">true</span>;</span><br><span class="line">    invocation.onreadystatechange = handler;</span><br><span class="line">    invocation.send(); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>假设服务器成功响应返回部分信息如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-Origin: http://foo.example</span><br><span class="line">Access-Control-Allow-Credentials: true</span><br><span class="line">Set-Cookie: pageAccess=3; expires=Wed, 31-Dec-2008 01:34:53 GMT // 创建了更多的cookie信息</span><br></pre></td></tr></table></figure>
+<p>如果服务器端的响应中，如果没有返回<code>Access-Control-Allow-Credentials： true</code>的响应头，那么浏览器将不会把响应结果传递给发出请求的脚本程序，以保证信息的安全。同时<code>Access-Control-Allow-Origin</code>必须设置为请求传递的<code>Origin</code>，否则响应会失败；</p>
+<p>CORS的优点：<strong>CORS支持所有类型的HTTP请求，是跨域HTTP请求的根本解决方案</strong>；</p>
+<h6 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h6><ul>
+<li><a href="https://segmentfault.com/a/1190000011145364">前端常见跨域解决方案（全）</a></li>
+<li>[前端跨域问题及解决方案] (<a href="https://segmentfault.com/a/1190000011145364">https://segmentfault.com/a/1190000011145364</a>)</li>
 </ul>
-</li>
-</ul>
-</li>
-<li>Gulp</li>
-<li>rollup</li>
-<li>CSS预处理与模块化<ul>
-<li>SASS</li>
-</ul>
-</li>
-<li>Linter</li>
-</ul>
-<h2 id="框架与类库"><a href="#框架与类库" class="headerlink" title="框架与类库"></a>框架与类库</h2><ul>
-<li>Vue<ul>
-<li>Vue部分概念梳理<ul>
-<li><a href="https://mmear.github.io/2018/11/13/Something-in-vue/" target="_blank" rel="noopener">Vue学习笔记(一):一些概念</a></li>
-<li><a href="https://mmear.github.io/2018/11/16/vue%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89-%E5%8F%98%E5%8C%96%E4%BE%A6%E6%B5%8B%E5%8E%9F%E7%90%86/" target="_blank" rel="noopener">Vue学习笔记(二):变化侦测原理</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>React</li>
-<li>RxJS</li>
-</ul>
-<h2 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h2><ul>
-<li>XSS</li>
-<li>HTTPS</li>
-</ul>
-<h2 id="自动化测试"><a href="#自动化测试" class="headerlink" title="自动化测试"></a>自动化测试</h2><h2 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h2><h2 id="新技术-方向"><a href="#新技术-方向" class="headerlink" title="新技术/方向"></a>新技术/方向</h2><ul>
-<li>SSR</li>
-<li>PWA</li>
-</ul>
-
+</script></p>
     </article>
     <!-- license  -->
     
@@ -459,17 +459,12 @@ height:50vh;
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2018/11/16/vue学习笔记（二）-变化侦测原理/" title="Vue学习笔记（二）:变化侦测原理">
-                    <div class="nextTitle">Vue学习笔记（二）:变化侦测原理</div>
-                </a>
-            
         </li>
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href="/2018/11/13/Something-in-vue/" title="vue学习笔记（一）:一些概念">
-                    <div class="prevTitle">vue学习笔记（一）:一些概念</div>
+                <a href="/2018/11/16/vue学习笔记（三）-模板编译原理/" title="vue学习笔记（三）:模板编译原理">
+                    <div class="prevTitle">vue学习笔记（三）:模板编译原理</div>
                 </a>
             
         </li>
@@ -485,7 +480,7 @@ height:50vh;
 <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
     var gitment = new Gitment({
-        // id: "前端技术清单", // 可选。默认为 location.href
+        // id: "", // 可选。默认为 location.href
         owner: 'Mmear',
         repo: 'CommentStore',
         oauth: {
@@ -613,7 +608,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础"><span class="toc-number">1.</span> <span class="toc-text">基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#工程化工具"><span class="toc-number">2.</span> <span class="toc-text">工程化工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#框架与类库"><span class="toc-number">3.</span> <span class="toc-text">框架与类库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安全"><span class="toc-number">4.</span> <span class="toc-text">安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自动化测试"><span class="toc-number">5.</span> <span class="toc-text">自动化测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#性能优化"><span class="toc-number">6.</span> <span class="toc-text">性能优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#新技术-方向"><span class="toc-number">7.</span> <span class="toc-text">新技术/方向</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前端跨域问题"><span class="toc-number">1.</span> <span class="toc-text">前端跨域问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是跨域"><span class="toc-number">1.1.</span> <span class="toc-text">什么是跨域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#同源策略-Same-origin-policy"><span class="toc-number">1.2.</span> <span class="toc-text">同源策略(Same origin policy)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方案"><span class="toc-number">1.3.</span> <span class="toc-text">解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#主域相同的跨域"><span class="toc-number">1.3.1.</span> <span class="toc-text">主域相同的跨域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完全不同源的跨域（两个页面之间的通信）"><span class="toc-number">1.3.2.</span> <span class="toc-text">完全不同源的跨域（两个页面之间的通信）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AJAX-请求不同源的跨域"><span class="toc-number">1.3.3.</span> <span class="toc-text">AJAX 请求不同源的跨域</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#JSONP"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">JSONP</span></a></li></ol></li></ol></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
