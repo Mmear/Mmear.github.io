@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">1.9k</span>阅读时长: <span class="post-count reading-time">7 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">2k</span>阅读时长: <span class="post-count reading-time">7 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -410,14 +410,51 @@ height:50vh;
 <li>脚本请求：通过 JS 发起的 Ajax 请求，DOM 和 JS 对象的跨域操作灯等；</li>
 </ul>
 <p>通常所说的跨域是狭义的，是由浏览器同源策略限制的一类场景；</p>
-<h2 id="同源策略-Same-origin-policy"><a href="#同源策略-Same-origin-policy" class="headerlink" title="同源策略(Same origin policy)"></a>同源策略(Same origin policy)</h2><p>同源策略是浏览器最基本的安全策略，如果缺少了同源策略，浏览器很容易受到 XSS、CSFR 攻击；同源是指：如果<strong>协议、主机、端口</strong>对于两个页面是相同的，则两个页面是同源的；<br>下表是给出了对<a href="http://store.company.com/dir/page.html" target="_blank" rel="noopener">http://store.company.com:80</a>的同源检测：<br>| URL | 结果 | 原因 |<br>| — | :-: | –: |<br>|<a href="http://store.company.com/dir/inner/another.html" target="_blank" rel="noopener">http://store.company.com/dir/inner/another.html</a> | 成功 | 同一域名 |<br>|<a href="http://store.company.com/dir2/other.html" target="_blank" rel="noopener">http://store.company.com/dir2/other.html</a> | 成功 | 同一域名下不同文件夹 |<br>| <a href="https://store.company.com/secure.html" target="_blank" rel="noopener">https://store.company.com/secure.html</a> | 失败 | 不同的协议 ( https ) |<br>| <a href="http://store.company.com:81/dir/etc.html" target="_blank" rel="noopener">http://store.company.com:81/dir/etc.html</a>| 失败 | 不同的端口 ( 81 ) |<br>| <a href="http://news.company.com/dir/other.html" target="_blank" rel="noopener">http://news.company.com/dir/other.html</a> | 失败 | 主域相同，子域不同( news ) |<br>|<a href="http://news.company.com/dir/other.html" target="_blank" rel="noopener">http://news.company.com/dir/other.html</a>   | 失败    | 域名不同    |</p>
+<h2 id="同源策略-Same-origin-policy"><a href="#同源策略-Same-origin-policy" class="headerlink" title="同源策略(Same origin policy)"></a>同源策略(Same origin policy)</h2><p>同源策略是浏览器最基本的安全策略，如果缺少了同源策略，浏览器很容易受到 XSS、CSFR 攻击；同源是指：如果<strong>协议、主机、端口</strong>对于两个页面是相同的，则两个页面是同源的；<br>下表是给出了对<a href="http://store.company.com/dir/page.html" target="_blank" rel="noopener">http://store.company.com:80</a>的同源检测：<br>| URL | 结果 | 原因 |<br>| — | :—:| —:|<br>|<a href="http://store.company.com/dir/inner/another.html" target="_blank" rel="noopener">http://store.company.com/dir/inner/another.html</a> | 成功 | 同一域名 |<br>|<a href="http://store.company.com/dir2/other.html" target="_blank" rel="noopener">http://store.company.com/dir2/other.html</a> | 成功 | 同一域名下不同文件夹 |<br>|<a href="https://store.company.com/secure.html" target="_blank" rel="noopener">https://store.company.com/secure.html</a> | 失败 | 不同的协议 ( https ) |<br>|<a href="http://store.company.com:81/dir/etc.html" target="_blank" rel="noopener">http://store.company.com:81/dir/etc.html</a>| 失败 | 不同的端口 ( 81 ) |<br>|<a href="http://news.company.com/dir/other.html" target="_blank" rel="noopener">http://news.company.com/dir/other.html</a> | 失败 | 主域相同，子域不同( news ) |<br>|<a href="http://news.company.com/dir/other.html" target="_blank" rel="noopener">http://news.company.com/dir/other.html</a>   | 失败    | 域名不同    |</p>
+<table>
+<thead>
+<tr>
+<th>item</th>
+<th>Model</th>
+<th style="text-align:right">Price</th>
+<th style="text-align:right">Qty</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Laptop</td>
+<td>13” Pro</td>
+<td style="text-align:right">$1,300</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td>Phone</td>
+<td>Plus</td>
+<td style="text-align:right">$800</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>Watch</td>
+<td>Series 3</td>
+<td style="text-align:right">$400</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>Headphone</td>
+<td>HD650</td>
+<td style="text-align:right">$350</td>
+<td style="text-align:right">2</td>
+</tr>
+</tbody>
+</table>
 <h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="主域相同的跨域"><a href="#主域相同的跨域" class="headerlink" title="主域相同的跨域"></a>主域相同的跨域</h3><p> <code>document.domain</code> + <code>iframe</code> 实现跨域</p>
 <h3 id="完全不同源的跨域（两个页面之间的通信）"><a href="#完全不同源的跨域（两个页面之间的通信）" class="headerlink" title="完全不同源的跨域（两个页面之间的通信）"></a>完全不同源的跨域（两个页面之间的通信）</h3><ol>
 <li>通过<code>location.hash</code>跨域</li>
 <li>通过<code>window.name</code>跨域</li>
 <li>HTML5 通过引入全新的跨文档通信 API<code>window.postMessage</code> 允许跨文档通信<br><img src="https://camo.githubusercontent.com/67de92bfdab7eaf9d25149e539ef5bc14a23ca1e/687474703a2f2f75706c6f61642d696d616765732e6a69616e7368752e696f2f75706c6f61645f696d616765732f333738393339392d326262313963396238666231623463332e706e673f696d6167654d6f6772322f6175746f2d6f7269656e742f7374726970253743696d61676556696577322f322f772f31323430" alt="Paste_Image.png"></li>
 </ol>
-<h3 id="AJAX-请求不同源的跨域"><a href="#AJAX-请求不同源的跨域" class="headerlink" title="AJAX 请求不同源的跨域"></a>AJAX 请求不同源的跨域</h3><h4 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h4><p> 通过 <code>JSONP</code>请求跨域，网页通过添加一个<code>script</code>标签，向服务器请求 JSON 数据，这种做法不受同源政策限制；服务器收到请求后，将数据放在一个指定名字的回调函数里传回来：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* client */</span></span><br><span class="line"><span class="comment">// 回调函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">cb</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> script = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</span><br><span class="line"><span class="comment">// 向服务器发送请求</span></span><br><span class="line">script.src = <span class="string">"/http://server.test/data?callback=cb"</span>;</span><br></pre></td></tr></table></figure></p>
+<h3 id="AJAX-请求不同源的跨域"><a href="#AJAX-请求不同源的跨域" class="headerlink" title="AJAX 请求不同源的跨域"></a>AJAX 请求不同源的跨域</h3><h4 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h4><p> 通过 <code>JSONP</code>请求跨域，网页通过添加一个<script>元素，向服务器请求 JSON 数据，这种做法不受同源政策限制；服务器收到请求后，将数据放在一个指定名字的回调函数里传回来：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* client */</span></span><br><span class="line"><span class="comment">// 回调函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">cb</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(data);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> script = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</span><br><span class="line"><span class="comment">// 向服务器发送请求</span></span><br><span class="line">script.src = <span class="string">"/http://server.test/data?callback=cb"</span>;</span><br></pre></td></tr></table></figure>
 <p>服务器返回：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* server */</span></span><br><span class="line"><span class="keyword">var</span> querystring = <span class="built_in">require</span>(<span class="string">'querystring'</span>);</span><br><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> server = http.createServer();</span><br><span class="line"></span><br><span class="line">server.on(<span class="string">'request'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> params = qs.parse(req.url.split(<span class="string">'?'</span>)[<span class="number">1</span>]);</span><br><span class="line">    <span class="keyword">var</span> fn = params.callback;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// jsonp返回设置</span></span><br><span class="line">    res.writeHead(<span class="number">200</span>, &#123; <span class="string">'Content-Type'</span>: <span class="string">'text/javascript'</span> &#125;);</span><br><span class="line">    res.write(fn + <span class="string">'('</span> + <span class="built_in">JSON</span>.stringify(params) + <span class="string">')'</span>);</span><br><span class="line"></span><br><span class="line">    res.end();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.listen(<span class="string">'8080'</span>);</span><br></pre></td></tr></table></figure>
 <h4 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h4><p>通过<code>WebSocket</code>跨域，是一种通信协议，不执行同源政策；</p>
@@ -447,16 +484,21 @@ Access-Control-Request-Headers: X-PINGOTHER
 <p>如果服务器端的响应中，如果没有返回<code>Access-Control-Allow-Credentials： true</code>的响应头，那么浏览器将不会把响应结果传递给发出请求的脚本程序，以保证信息的安全。同时<code>Access-Control-Allow-Origin</code>必须设置为请求传递的<code>Origin</code>，否则响应会失败；</p>
 <p>CORS的优点：<strong>CORS支持所有类型的HTTP请求，是跨域HTTP请求的根本解决方案</strong>；</p>
 <h6 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h6><ul>
-<li><a href="https://segmentfault.com/a/1190000011145364" target="_blank" rel="noopener">前端常见跨域解决方案（全）</a></li>
-<li><a href="https://segmentfault.com/a/1190000011145364" target="_blank" rel="noopener">前端跨域问题及解决方案</a></li>
+<li><a href="https://segmentfault.com/a/1190000011145364">前端常见跨域解决方案（全）</a></li>
+<li><a href="https://segmentfault.com/a/1190000011145364">前端跨域问题及解决方案</a></li>
 </ul>
-
+</script></p>
     </article>
     <!-- license  -->
     
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2019/03/12/TCP协议三次握手-四次挥手/" title="TCP协议三次握手&四次挥手">
+                    <div class="nextTitle">TCP协议三次握手&四次挥手</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -607,7 +649,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前端跨域问题"><span class="toc-number">1.</span> <span class="toc-text">前端跨域问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是跨域"><span class="toc-number">1.1.</span> <span class="toc-text">什么是跨域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#同源策略-Same-origin-policy"><span class="toc-number">1.2.</span> <span class="toc-text">同源策略(Same origin policy)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方案"><span class="toc-number">1.3.</span> <span class="toc-text">解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#主域相同的跨域"><span class="toc-number">1.3.1.</span> <span class="toc-text">主域相同的跨域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完全不同源的跨域（两个页面之间的通信）"><span class="toc-number">1.3.2.</span> <span class="toc-text">完全不同源的跨域（两个页面之间的通信）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AJAX-请求不同源的跨域"><span class="toc-number">1.3.3.</span> <span class="toc-text">AJAX 请求不同源的跨域</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#JSONP"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">JSONP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#WebSocket"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">WebSocket</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#跨域资源共享-CORS-："><span class="toc-number">1.3.3.3.</span> <span class="toc-text">跨域资源共享(CORS)：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#简单请求"><span class="toc-number">1.3.3.3.1.</span> <span class="toc-text">简单请求</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#预请求"><span class="toc-number">1.3.3.3.2.</span> <span class="toc-text">预请求</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#附带凭证信息的请求"><span class="toc-number">1.3.3.3.3.</span> <span class="toc-text">附带凭证信息的请求</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#参考链接"><span class="toc-number">1.3.3.3.3.1.</span> <span class="toc-text">参考链接</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前端跨域问题"><span class="toc-number">1.</span> <span class="toc-text">前端跨域问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是跨域"><span class="toc-number">1.1.</span> <span class="toc-text">什么是跨域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#同源策略-Same-origin-policy"><span class="toc-number">1.2.</span> <span class="toc-text">同源策略(Same origin policy)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方案"><span class="toc-number">1.3.</span> <span class="toc-text">解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#主域相同的跨域"><span class="toc-number">1.3.1.</span> <span class="toc-text">主域相同的跨域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完全不同源的跨域（两个页面之间的通信）"><span class="toc-number">1.3.2.</span> <span class="toc-text">完全不同源的跨域（两个页面之间的通信）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AJAX-请求不同源的跨域"><span class="toc-number">1.3.3.</span> <span class="toc-text">AJAX 请求不同源的跨域</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#JSONP"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">JSONP</span></a></li></ol></li></ol></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -779,9 +821,18 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 15
+        Total : 16
         </div>
         <!-- search  -->
         
@@ -794,6 +845,11 @@ top:50vh;
     
     <div class="archive-year"> 2019 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/12</span><a class="archive-post-title" href="/2019/03/12/TCP协议三次握手-四次挥手/">TCP协议三次握手&四次挥手</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -888,11 +944,13 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
-        <span class="sidebar-tag-name" data-tags="webpack"><span class="iconfont-archer">&#xe606;</span>webpack</span>
+        <span class="sidebar-tag-name" data-tags="计算机网络"><span class="iconfont-archer">&#xe606;</span>计算机网络</span>
     
         <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
         <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
+    
+        <span class="sidebar-tag-name" data-tags="webpack"><span class="iconfont-archer">&#xe606;</span>webpack</span>
     
         <span class="sidebar-tag-name" data-tags="Hexo"><span class="iconfont-archer">&#xe606;</span>Hexo</span>
     

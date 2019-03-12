@@ -22,7 +22,7 @@
     <meta name="description" content="">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>ES6 学习笔记（一） · Mmear&#39;s Factory</title>
+    <title>TCP协议三次握手&amp;四次挥手 · Mmear&#39;s Factory</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/">Mmear&#39;s 😘.</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">ES6 学习笔记（一）</a>
+                <a href="#" class="post-name">TCP协议三次握手&四次挥手</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            ES6 学习笔记（一）
+            TCP协议三次握手&四次挥手
             <!-- 404 -->
             
         </h1>
@@ -266,18 +266,18 @@ height:50vh;
                 
                     <div class="post-intro-tags">
     
-        <a class="post-tag" href="javascript:void(0);" data-tags="JavaScript">JavaScript</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="计算机网络">计算机网络</a>
     
 </div>
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">1.3k</span>阅读时长: <span class="post-count reading-time">5 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">1.8k</span>阅读时长: <span class="post-count reading-time">6 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2018/07/30</span>
+                    <span class="post-intro-time">2019/03/12</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -401,80 +401,55 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h2 id="ES6笔记"><a href="#ES6笔记" class="headerlink" title="ES6笔记"></a>ES6笔记</h2><p>这篇blog用来收集学习ES6过程中遇到的大坑小坑、容易忽略的知识点等~ <del>可能会有二吧</del></p>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
-<li><a href="https://www.babeljs.cn/learn-es2015/" target="_blank" rel="noopener">BABEL 学习ES2015</a></li>
-<li><a href="http://es6.ruanyifeng.com/#docs/" target="_blank" rel="noopener">阮一峰 ECMAScript 6 入门（第三版）</a></li>
-<li><a href="https://juejin.im/post/59a80ba06fb9a02497170704" target="_blank" rel="noopener">深入理解ES6 -掘金</a></li>
-</ul>
-<h2 id="let和const命令"><a href="#let和const命令" class="headerlink" title="let和const命令"></a>let和const命令</h2><h3 id="不存在变量提升"><a href="#不存在变量提升" class="headerlink" title="不存在变量提升"></a>不存在变量提升</h3><p><code>var</code>声明的变量存在变量提升个性，即先引用后声明，变量值为<code>undefined</code>，<code>let</code>声明的变量不允许变量提升，和一般的编译型语言相同，需要先声明后引用，否则将会抛出<code>ReferenceError</code>错误</p>
-<h3 id="块级作用域"><a href="#块级作用域" class="headerlink" title="块级作用域"></a>块级作用域</h3><p><code>let</code>声明的变量只在所在的块级作用域中生效，ES6规定的块级作用域由<code>{}</code>构成，可用于取代传统的立即执行函数表达式(IIFE)<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//IIFE</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a = <span class="number">5</span>;</span><br><span class="line">	<span class="built_in">console</span>.log(a);</span><br><span class="line">&#125;)();</span><br><span class="line"><span class="comment">//ES6块级作用域</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">let</span> a = <span class="number">5</span>;</span><br><span class="line">	<span class="built_in">console</span>.log(a);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>与<code>var</code>不同，在外部用<code>let</code>声明的变量并<em>**</em>到顶层对象<code>window</code>/<code>global</code>上<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> x = <span class="number">6</span>;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.x); <span class="comment">//undefined</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="const命令的本质"><a href="#const命令的本质" class="headerlink" title="const命令的本质"></a>const命令的本质</h3><p><code>const</code>命令保证的是该变量指向的内存地址中储存的值不发生变动，对于简单类型值，内存所保存的值就是自己，所以看起来就像常量无法改动；然而对于复合类型——数组、对象来说，内存所保存的值是一个<strong>指针</strong>，该指针指向的才是真正的数据结构</p>
-<p>因此，将对象、数组声明为常量时，并不能保证内部数据不可变，只能保证该对象/数组还是原来的对象/数组<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> t = &#123;<span class="attr">name</span>: <span class="string">'Mike'</span>&#125;;</span><br><span class="line"><span class="comment">//可以执行</span></span><br><span class="line">t.age = <span class="number">17</span>;</span><br><span class="line"><span class="comment">//报错 // TypeError: "t" is read-only</span></span><br><span class="line">t = &#123;&#125;;</span><br></pre></td></tr></table></figure></p>
-<h2 id="变量的解构赋值"><a href="#变量的解构赋值" class="headerlink" title="变量的解构赋值"></a>变量的解构赋值</h2><h3 id="数组的解构赋值"><a href="#数组的解构赋值" class="headerlink" title="数组的解构赋值"></a>数组的解构赋值</h3><ul>
-<li><p>解构不成功的情况下，变量值等于<code>undefined</code></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [a, b, c] = [<span class="string">'a'</span>]</span><br><span class="line"><span class="comment">// a='a', b = undefined, c = undefined</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>解构赋值的右边必须为可遍历的结构（如Array, Set, Generator函数或其他含有Iterator接口的对象）</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [a, b, c] = <span class="keyword">new</span> <span class="built_in">Set</span>([<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>解构赋值的默认值只有在右边数组成员存在<code>undefined</code>情况下才能生效</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [a, b=<span class="string">'b'</span>] = [<span class="number">1</span>, <span class="literal">undefined</span>];</span><br><span class="line">b <span class="comment">//b</span></span><br><span class="line"><span class="keyword">let</span> [a, b=<span class="string">'b'</span>] = [<span class="number">1</span>, <span class="literal">null</span>];</span><br><span class="line">b <span class="comment">//null</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>解构赋值的默认值还可以是其他（已声明）的变量或者函数执行结果</p>
-  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [a=f()] = [...];</span><br><span class="line"><span class="keyword">let</span> [b=a] = [...]</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="对象的结构赋值"><a href="#对象的结构赋值" class="headerlink" title="对象的结构赋值"></a>对象的结构赋值</h3><blockquote>
-<p>对象的解构与数组有一个重要的不同。数组的元素是按次序排列的，变量的取值由它的位置决定；而对象的属性没有次序，<strong>变量必须与属性同名</strong>，才能取到正确的值。</p>
-</blockquote>
+        <h1 id="TCP协议中的『三次握手』与『四次挥手』"><a href="#TCP协议中的『三次握手』与『四次挥手』" class="headerlink" title="TCP协议中的『三次握手』与『四次挥手』"></a>TCP协议中的『三次握手』与『四次挥手』</h1><h2 id="TCP-IP-参考模型"><a href="#TCP-IP-参考模型" class="headerlink" title="TCP/IP 参考模型"></a>TCP/IP 参考模型</h2><p>TCP 协议属于著名的<code>TCP/IP 参考模型</code>，被全球范围内的互联网所使用，该模型从上至下分为『应用层』『传输层』『网络层/互联网层』『数据链路层』，相较于它的原型七层 <code>OSI 参考模型</code>少了『表示层』『会话层』以及『物理层』；</p>
+<p> TCP (Transport Control Protocol)即传输控制协议是一个<strong>可靠的、面向连接</strong>的协议，位于 TCP/IP 模型的第二层『传输层』，该层定义了两个<strong>端到端</strong>的传输协议，设计目标是允许源主机与目标主机上的对等实体进行对话；同样位于该层的还有用户数据报协议（UDP，User Datagram Protocol），该协议是无连接且不可靠的协议，一般用于语音和视频传输；</p>
+<p><img src="tcpip.png" alt="TCPIP"></p>
+<h2 id="TCP-报文信息"><a href="#TCP-报文信息" class="headerlink" title="TCP 报文信息"></a>TCP 报文信息</h2><p>TCP 的<strong>头部报文</strong>结构如下：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/12/5/1677d4e5cbe9cba6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="TCPHEADER"><br><a href="https://user-gold-cdn.xitu.io/2018/12/5/1677d4e5cbe9cba6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" target="_blank" rel="noopener">图片来源</a></p>
 <ul>
-<li><p>若变量不与属性同名，需写成：</p>
-  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123;<span class="attr">foo</span>: var_1, <span class="attr">bar</span>: var_2&#125; = &#123;<span class="attr">foo</span>: <span class="string">'foo'</span>, <span class="attr">bar</span>: <span class="string">'bar'</span>&#125;;</span><br></pre></td></tr></table></figure>
+<li><p>『Port』 传输层与网络层的一个相似任务就是<strong>寻址</strong>，TCP 协议不关心 IP 地址，只关心目标进程的<code>端口号</code>，因此会携带发起通信进程的端口号和目标端口号；</p>
 </li>
-<li><p>与数组解构赋值一样，支持嵌套的解构赋值</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">	p: [<span class="string">'Hello'</span>, &#123;<span class="attr">y</span>: <span class="string">'World'</span> &#125;]</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">let</span> &#123; <span class="attr">p</span>: [x, &#123; y &#125;] &#125; = obj;</span><br><span class="line">x <span class="comment">// "Hello"</span></span><br><span class="line">y <span class="comment">// "World"</span></span><br></pre></td></tr></table></figure>
-<p>  此处<code>p</code>为匹配的属性，后接匹配模式</p>
+<li><p>『Sequence Number』即 <code>seq序号</code>，用于表明<strong>当前数据包的顺序</strong>， 接收方根据这个序号来给接收到的数据包排序，将有序的报文提交给上层；另外要注意的是当有数据需要发送的时候，seq会随该序列号为原点，对自己将要发送的每个字节的数据进行编号，比如当前seq = 10，本次要发送的数据包大小是200字节，那么实际发送的时候会更新seq=210，以便保证传输的数据的顺序；</p>
 </li>
-<li><p>将一个已声明的变量用于解构赋值时，需要注意：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> x;</span><br><span class="line">&#123;x&#125; = &#123;<span class="attr">x</span>: <span class="string">'zed'</span>&#125;;</span><br><span class="line"><span class="comment">// SyntaxError: syntax error</span></span><br></pre></td></tr></table></figure>
-<p>  因为JS引擎会将<code>{x}</code>解释为一个块级作用域，导致赋值不合法，正确的写法为：</p>
-  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> x;</span><br><span class="line">(&#123;x&#125; = &#123;<span class="attr">x</span>: <span class="string">'zed'</span>&#125;);</span><br><span class="line">x <span class="comment">//zed</span></span><br></pre></td></tr></table></figure>
+<li><p>『Acknowledege Number』，即<code>ACK确认号</code>，用于对传输方 seq 的确认，一般设置为收到的最后一个 seq 或 seq+1，随着下一个数据包捎带发送出去；只有当标志位中的<strong>ACK标志位</strong>为1时该确认序列号的字段才有效，用来解决网络丢包问题；</p>
 </li>
-<li><p>对象解构赋值一个应用之处在于将某个对象的方法一次性赋值给变量：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123;sin, cos, log&#125; = <span class="built_in">Math</span>;</span><br></pre></td></tr></table></figure>
+<li><p>『Window』<code>滑动窗口</code>，win 可以理解为缓冲区域的大小，win 值越大，一次能够发送（无需等待 ACK 应答 ）的数据包就越大，win 值会随着数据吞吐速率变化而变化；</p>
+</li>
+<li><p>『控制位』<code>标志位</code>，常见的有 SYN、ACK、FIN、RST 等；表明各种了下一步通信双方应该进行的动作；如 FIN 表明执行断开连接操作，SYN 表示开始连接操作并设置初始 seq 值 等；</p>
 </li>
 </ul>
-<h3 id="字符串、布尔值、数值的解构赋值"><a href="#字符串、布尔值、数值的解构赋值" class="headerlink" title="字符串、布尔值、数值的解构赋值"></a>字符串、布尔值、数值的解构赋值</h3><p>对于字符串，可看作是字符数组；对于布尔值与数值，会先转换为对象，再通过对象的<code>toString</code>方法解构：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123;<span class="attr">toString</span>: s&#125; = <span class="number">123</span>;</span><br><span class="line"><span class="keyword">let</span> &#123;<span class="attr">toString</span>: k&#125; = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(s === <span class="built_in">Number</span>.prototype.toString) <span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(k === <span class="built_in">Boolean</span>.prototype.toString) <span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(s.apply(<span class="number">1234</span>)); <span class="comment">//1234</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="函数参数的解构赋值"><a href="#函数参数的解构赋值" class="headerlink" title="函数参数的解构赋值"></a>函数参数的解构赋值</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">func</span>(<span class="params">[x, y]</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x + y;      </span><br><span class="line">&#125;</span><br><span class="line">func([<span class="number">1</span>, <span class="number">3</span>]);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">func2</span>(<span class="params">&#123;x, y&#125;</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x + y;      </span><br><span class="line">&#125;</span><br><span class="line">func([<span class="number">1</span>, <span class="number">3</span>]);</span><br><span class="line">func2(&#123;<span class="attr">x</span>: <span class="number">1</span>, <span class="attr">y</span>: <span class="number">3</span>&#125;);</span><br><span class="line"><span class="comment">//虽然传进去的是数组，但在函数内部可直接取到x和y</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>可以使用默认值</li>
-</ul>
-<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><ul>
-<li><p>交换变量的值</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> x = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">let</span> y = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">let</span> [x, y] = [y, x];</span><br></pre></td></tr></table></figure>
+<h2 id="建立连接『三次握手』"><a href="#建立连接『三次握手』" class="headerlink" title="建立连接『三次握手』"></a>建立连接『三次握手』</h2><p><img src="shakehand.png" alt="shakehand"></p>
+<p>如图所示，对百度首页进行一次访问，用 wireshark 捕获的 TCP 包中的前三个完整表示了一次 TCP 协议建立连接的流程；   </p>
+<ol>
+<li><p>客户端向服务器发送建立连接请求包，将 SYN 标志位设置为 1，同时设置起始序号 seq=0，并附带滑动窗口大小（win），希望接受的数据包长度（len），能接受的最大包大小（mss）；可以简单表示为<code>SYN(seq=0)</code> <em>mss，Maximum Segment Size： 除去头部后，一个网络包所能容纳的 最大 TCP 数据长度</em></p>
 </li>
-<li><p>从函数返回多个值</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">func</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> [r1, r2, r2] = func();</span><br></pre></td></tr></table></figure>
+<li><p>服务器响应客户端请求，同意建立连接， 也将 SYN 标志位设置为 1、seq 设置为 0，并<strong>设置 ack 号为 1（即上一个接受到的 seq+1</strong>、以及滑动窗口等信息；表示为<code>[SYN, ACK](seq=0, ack=1)</code></p>
 </li>
-<li><p>便于函数传参(自动对应)</p>
+<li><p>客户端收到目标回应，表明可以建立一次连接，并进行最后的回复确认； 同样设置 ack 号为 1，但 seq 号在之前的基础上+1，最后发送的包表示为<code>ACK(seq=1， ack=1)</code></p>
 </li>
-<li>提取JSON数据</li>
-<li>输入模块的指定方法</li>
-<li>指定函数参数的默认值<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">jquery.ajax = <span class="function"><span class="keyword">function</span>(<span class="params">url, &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">	async = true,</span></span></span><br><span class="line"><span class="function"><span class="params">	beforeSend = function (</span>) </span>&#123;&#125;,</span><br><span class="line">	cache = <span class="literal">true</span>,</span><br><span class="line">	complete = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">	crossDomain = <span class="literal">false</span>,</span><br><span class="line">	global = <span class="literal">true</span>,</span><br><span class="line"> <span class="comment">// ... more config</span></span><br><span class="line">&#125; = &#123;&#125;) &#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//其中第二个参数若未指定，则默认值为一个空对象</span></span><br></pre></td></tr></table></figure>
+</ol>
+<h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>『三次握手』的流程是为了尽可能确保一次连接的安全性和快捷性，如果不对请求进行回复确认，双方都不清楚对方是否收到自己的请求，数据的传输便会失去保障；而如果不是三次握手，而是四次五次，则建立连接的效率会变得低下，尤其是 HTTP1.0 协议还没有<code>keep-alive</code>请求头的情况下；</p>
+<p>而 ack 确认号与 seq 序号的机制保证了传输的有序性，配合缓冲区能够有效地解决网络传输中的丢包问题；</p>
+<h2 id="中断连接——『四次挥手』"><a href="#中断连接——『四次挥手』" class="headerlink" title="中断连接——『四次挥手』"></a>中断连接——『四次挥手』</h2><p>TCP 协议是全双工协议，双方可以同时收发数据，为了保证数据完整传输，双方都要对中断进行两次确认；中断过程可以由任意一方发起：</p>
+<ol>
+<li><p>假设服务器方发起中断请求，首先要将控制位中的 FIN 设置为 1，附带最后的数据信息发送给客户端；表示为<code>FIN(seq)</code>，进入<code>FIN_WAIT</code>状态；</p>
 </li>
-</ul>
-<h2 id="字符串扩展"><a href="#字符串扩展" class="headerlink" title="字符串扩展"></a>字符串扩展</h2><h2 id="箭头函数"><a href="#箭头函数" class="headerlink" title="箭头函数"></a>箭头函数</h2><p>箭头函数有几个使用注意点:</p>
-<ul>
-<li><p>没有自身的this对象，也不能绑定this对象</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">outer</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">let</span> x = <span class="number">5</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="keyword">this</span>.x);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(outer()());</span><br></pre></td></tr></table></figure>
+<li><p>客户端收到 FIN=1，向服务器方发送 ack 号 进行确认，进入<code>CLOSE_WAIT</code>状态；并调用应用程序读取剩余的数据 / 准备发送剩余数据；</p>
 </li>
-<li><p>不可以当作构造函数，也就是说，不可以使用new命令，否则会抛出一个错误</p>
+<li><p><strong>当数据读取完毕后</strong>，客户端也进入中断连接操作，和第一步一样向服务器发送<code>FIN(seq)</code>，进入<code>LAST_WAIT</code>状态；</p>
 </li>
-<li>不可以使用arguments对象，该对象在函数体内不存在。如果要用，可以用Rest参数代替</li>
-<li>不可以使用yield命令，因此箭头函数不能用作Generator函数</li>
-</ul>
+<li>一段时间后，服务器就会返回 ack 号进行最后的确认，进入<code>TIME_WAIT</code>状态，<strong>经过一段时间</strong>（2MSL，最大报文文段生存时间）后停止监听，中断连接过程结束；</li>
+</ol>
+<p><img src="https://coolshell.cn/wp-content/uploads/2014/05/tcp_open_close.jpg" alt=""><br><a href="https://coolshell.cn/articles/11564.html" target="_blank" rel="noopener">图片来源</a></p>
+<h3 id="目的-1"><a href="#目的-1" class="headerlink" title="目的"></a>目的</h3><p>四次挥手是因为数据传输的不同步，一方已经传送完数据了，但另一方还没有，于是先接受数据并回复，等到剩余数据准备好再发送 FIN，并等待 ACK 确认以保证双方数据都传输完毕； </p>
+<p>至于最后的<code>TIME_WAIT</code>状态，是为了防止最后的 ACK 包丢失，导致对方重发 FIN 但无人回应，甚至中断其它正常套接字的情况；经过最大报文文段生存时间后，即认为对方已经收到了；</p>
+<h2 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h2><p>最简单的一问一答形式（等到 ACK 回应后，再发送数据）叫做『单工停等协议』，这种同步方式虽然保证了数据传输的有序和完整，但效率实在低下；为了解决这个问题，TCP 协议采用了滑动窗口协议来<strong>管理数据发送和 ACK 号</strong>的操作。滑动窗口，即不用等待上一个包的 ACK 确认，就直接发送<strong>后续的一系列</strong>包；</p>
+<p><img src="window_1.png" alt="window_1"></p>
+<p>窗口由16位bit所定义，所以接收端的 TCP 窗口能最大提供65535个字节的缓冲，滑动窗口主要就是做限流和缓冲用的；如图，可以看见有三个连续的 ack=518 的包被发送，而 seq 则是不断增大的，说明 A 向 B 连续发送了三个数据包，只要 B 的滑动窗口还有空间，就可以继续连续发送数据包；</p>
+<p>B 在接收到突然的数据后可能来不及处理，便会发送对应的连续 ACK ，告知自己滑动窗口的变化， 当 B 处理完缓冲区的数据后，会向 A 发出一个<code>WINDOW_UPDATE</code>包，告知 A 自己的窗口大小已经增大；</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/12/5/1677d7f11f57f146?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
+<p>当一方的滑动窗口大小接近于 0 时，另一方便会停止发送，直到接收到 WINDOW_UPDATE 包的通知；</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://coolshell.cn/articles/11564.html" target="_blank" rel="noopener">TCP 的那些事儿（上）</a></p>
 
     </article>
     <!-- license  -->
@@ -483,17 +458,12 @@ height:50vh;
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2018/10/27/Webpck4-从入门到出门/" title="webpack4: 从入门到出门">
-                    <div class="nextTitle">webpack4: 从入门到出门</div>
-                </a>
-            
         </li>
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href="/2018/07/18/Git学习/" title="Git学习笔记">
-                    <div class="prevTitle">Git学习笔记</div>
+                <a href="/2019/03/11/前端跨域问题及解决方案/" title="前端跨域问题及解决方案">
+                    <div class="prevTitle">前端跨域问题及解决方案</div>
                 </a>
             
         </li>
@@ -509,7 +479,7 @@ height:50vh;
 <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
     var gitment = new Gitment({
-        // id: "ES6 学习笔记（一）", // 可选。默认为 location.href
+        // id: "TCP协议三次握手&四次挥手", // 可选。默认为 location.href
         owner: 'Mmear',
         repo: 'CommentStore',
         oauth: {
@@ -637,7 +607,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ES6笔记"><span class="toc-number">1.</span> <span class="toc-text">ES6笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#参考资料"><span class="toc-number">1.1.</span> <span class="toc-text">参考资料</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#let和const命令"><span class="toc-number">2.</span> <span class="toc-text">let和const命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#不存在变量提升"><span class="toc-number">2.1.</span> <span class="toc-text">不存在变量提升</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#块级作用域"><span class="toc-number">2.2.</span> <span class="toc-text">块级作用域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他"><span class="toc-number">2.3.</span> <span class="toc-text">其他</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#const命令的本质"><span class="toc-number">2.4.</span> <span class="toc-text">const命令的本质</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量的解构赋值"><span class="toc-number">3.</span> <span class="toc-text">变量的解构赋值</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数组的解构赋值"><span class="toc-number">3.1.</span> <span class="toc-text">数组的解构赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对象的结构赋值"><span class="toc-number">3.2.</span> <span class="toc-text">对象的结构赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串、布尔值、数值的解构赋值"><span class="toc-number">3.3.</span> <span class="toc-text">字符串、布尔值、数值的解构赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数参数的解构赋值"><span class="toc-number">3.4.</span> <span class="toc-text">函数参数的解构赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用途"><span class="toc-number">3.5.</span> <span class="toc-text">用途</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字符串扩展"><span class="toc-number">4.</span> <span class="toc-text">字符串扩展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#箭头函数"><span class="toc-number">5.</span> <span class="toc-text">箭头函数</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP协议中的『三次握手』与『四次挥手』"><span class="toc-number">1.</span> <span class="toc-text">TCP协议中的『三次握手』与『四次挥手』</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-IP-参考模型"><span class="toc-number">1.1.</span> <span class="toc-text">TCP/IP 参考模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-报文信息"><span class="toc-number">1.2.</span> <span class="toc-text">TCP 报文信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#建立连接『三次握手』"><span class="toc-number">1.3.</span> <span class="toc-text">建立连接『三次握手』</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#目的"><span class="toc-number">1.3.1.</span> <span class="toc-text">目的</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#中断连接——『四次挥手』"><span class="toc-number">1.4.</span> <span class="toc-text">中断连接——『四次挥手』</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#目的-1"><span class="toc-number">1.4.1.</span> <span class="toc-text">目的</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#滑动窗口"><span class="toc-number">1.5.</span> <span class="toc-text">滑动窗口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">1.6.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
