@@ -473,9 +473,8 @@ height:50vh;
 </ul>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> invocation = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line"><span class="keyword">var</span> url = <span class="string">'http://bar.other/resources/post-here/'</span>;</span><br><span class="line"><span class="keyword">var</span> body = <span class="string">'some messages'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">callOtherDomain</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(invocation)&#123;</span><br><span class="line">    invocation.open(<span class="string">'POST'</span>, url, <span class="literal">true</span>);</span><br><span class="line">    invocation.setRequestHeader(<span class="string">'X-PINGOTHER'</span>, <span class="string">'pingpong'</span>); <span class="comment">// 自定义请求头</span></span><br><span class="line">    invocation.setRequestHeader(<span class="string">'Content-Type'</span>, <span class="string">'application/xml'</span>); <span class="comment">// 发送XML数据</span></span><br><span class="line">    invocation.onreadystatechange = handler;</span><br><span class="line">    invocation.send(body); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如上，以 XMLHttpRequest 创建了一个 POST 请求，为该请求添加了一个自定义请求头(X-PINGOTHER: pingpong)，并指定数据类型为 application/xml。所以，该请求是一个『预请求』形式的跨站请求。浏览器使用一个 OPTIONS 发送了一个『预请求』。Firefox 3.1 根据请求参数，决定需要发送一个『预请求』，来探明服务器端是否接受后续真正的请求。 OPTIONS 是 HTTP/1.1 里的方法，用来获取更多服务器端的信息，是一个不应该对服务器数据造成影响的方法。 随同 OPTIONS 请求，以下两个请求头一起被发送：</p>
-<pre><code>Access-Control-Request-Method: POST
-Access-Control-Request-Headers: X-PINGOTHER
-</code></pre><p>假设服务器成功响应返回部分信息如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Request-Method: POST</span><br><span class="line"> Access-Control-Request-Headers: X-PINGOTHER</span><br></pre></td></tr></table></figure>
+<p>假设服务器成功响应返回部分信息如下：</p>
 <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> //表明服务器允许http://foo.example的请求</span><br><span class="line"><span class="attribute">Access-Control-Allow-Origin</span>: http://foo.example</span><br><span class="line"> //表明服务器可以接受POST, GET和 OPTIONS的请求方法</span><br><span class="line"><span class="attribute">Access-Control-Allow-Methods</span>: POST, GET, OPTIONS</span><br><span class="line">//传递一个可接受的自定义请求头列表。服务器也需要设置一个与浏览器对应。否则会报 Request header field X-Requested-With is not allowed by Access-Control-Allow-Headers in preflight response 的错误</span><br><span class="line"><span class="attribute">Access-Control-Allow-Headers</span>: X-PINGOTHER</span><br><span class="line">//告诉浏览器，本次“预请求”的响应结果有效时间是多久。在上面的例子里，1728000秒代表着20天内，浏览器在处理针对该服务器的跨站请求，都可以无需再发送“预请求”，只需根据本次结果进行判断处理。</span><br><span class="line"><span class="attribute">Access-Control-Max-Age</span>: 1728000</span><br></pre></td></tr></table></figure>
 <h5 id="附带凭证信息的请求"><a href="#附带凭证信息的请求" class="headerlink" title="附带凭证信息的请求"></a>附带凭证信息的请求</h5><p>XMLHttpRequest 和访问控制功能中最有趣的特性就是，<strong>发送凭证请求（HTTP Cookies和验证信息）</strong>的功能。一般而言，对于跨站请求，浏览器是不会发送凭证信息的。但如果将 XMLHttpRequest 的一个特殊标志位<code>withCredentials</code>设置为true，浏览器就将在请求中附带凭证信息。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//http://foo.example站点的脚本向http://bar.other站点发送一个GET请求，并设置了一个Cookies值</span></span><br><span class="line"><span class="keyword">var</span> invocation = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line"><span class="keyword">var</span> url = <span class="string">'http://bar.other/resources/credentialed-content/'</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">callOtherDomain</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(invocation) &#123;</span><br><span class="line">    invocation.open(<span class="string">'GET'</span>, url, <span class="literal">true</span>);</span><br><span class="line">    invocation.withCredentials = <span class="literal">true</span>;</span><br><span class="line">    invocation.onreadystatechange = handler;</span><br><span class="line">    invocation.send(); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -830,6 +829,10 @@ top:50vh;
     
     
     
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 16
@@ -946,11 +949,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="计算机网络"><span class="iconfont-archer">&#xe606;</span>计算机网络</span>
     
+        <span class="sidebar-tag-name" data-tags="webpack"><span class="iconfont-archer">&#xe606;</span>webpack</span>
+    
         <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
         <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
-    
-        <span class="sidebar-tag-name" data-tags="webpack"><span class="iconfont-archer">&#xe606;</span>webpack</span>
     
         <span class="sidebar-tag-name" data-tags="Hexo"><span class="iconfont-archer">&#xe606;</span>Hexo</span>
     
