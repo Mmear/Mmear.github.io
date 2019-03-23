@@ -274,7 +274,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">2k</span>阅读时长: <span class="post-count reading-time">7 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">1.9k</span>阅读时长: <span class="post-count reading-time">7 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -410,43 +410,7 @@ height:50vh;
 <li>脚本请求：通过 JS 发起的 Ajax 请求，DOM 和 JS 对象的跨域操作灯等；</li>
 </ul>
 <p>通常所说的跨域是狭义的，是由浏览器同源策略限制的一类场景；</p>
-<h2 id="同源策略-Same-origin-policy"><a href="#同源策略-Same-origin-policy" class="headerlink" title="同源策略(Same origin policy)"></a>同源策略(Same origin policy)</h2><p>同源策略是浏览器最基本的安全策略，如果缺少了同源策略，浏览器很容易受到 XSS、CSFR 攻击；同源是指：如果<strong>协议、主机、端口</strong>对于两个页面是相同的，则两个页面是同源的；<br>下表是给出了对<a href="http://store.company.com/dir/page.html" target="_blank" rel="noopener">http://store.company.com:80</a>的同源检测：<br>| URL | 结果 | 原因 |<br>| — | :—:| —:|<br>|<a href="http://store.company.com/dir/inner/another.html" target="_blank" rel="noopener">http://store.company.com/dir/inner/another.html</a> | 成功 | 同一域名 |<br>|<a href="http://store.company.com/dir2/other.html" target="_blank" rel="noopener">http://store.company.com/dir2/other.html</a> | 成功 | 同一域名下不同文件夹 |<br>|<a href="https://store.company.com/secure.html" target="_blank" rel="noopener">https://store.company.com/secure.html</a> | 失败 | 不同的协议 ( https ) |<br>|<a href="http://store.company.com:81/dir/etc.html" target="_blank" rel="noopener">http://store.company.com:81/dir/etc.html</a>| 失败 | 不同的端口 ( 81 ) |<br>|<a href="http://news.company.com/dir/other.html" target="_blank" rel="noopener">http://news.company.com/dir/other.html</a> | 失败 | 主域相同，子域不同( news ) |<br>|<a href="http://news.company.com/dir/other.html" target="_blank" rel="noopener">http://news.company.com/dir/other.html</a>   | 失败    | 域名不同    |</p>
-<table>
-<thead>
-<tr>
-<th>item</th>
-<th>Model</th>
-<th style="text-align:right">Price</th>
-<th style="text-align:right">Qty</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Laptop</td>
-<td>13” Pro</td>
-<td style="text-align:right">$1,300</td>
-<td style="text-align:right">1</td>
-</tr>
-<tr>
-<td>Phone</td>
-<td>Plus</td>
-<td style="text-align:right">$800</td>
-<td style="text-align:right">2</td>
-</tr>
-<tr>
-<td>Watch</td>
-<td>Series 3</td>
-<td style="text-align:right">$400</td>
-<td style="text-align:right">3</td>
-</tr>
-<tr>
-<td>Headphone</td>
-<td>HD650</td>
-<td style="text-align:right">$350</td>
-<td style="text-align:right">2</td>
-</tr>
-</tbody>
-</table>
+<h2 id="同源策略-Same-origin-policy"><a href="#同源策略-Same-origin-policy" class="headerlink" title="同源策略(Same origin policy)"></a>同源策略(Same origin policy)</h2><p>同源策略是浏览器最基本的安全策略，如果缺少了同源策略，浏览器很容易受到 XSS、CSFR 攻击；同源是指：如果<strong>协议、主机、端口</strong>对于两个页面是相同的，则两个页面是同源的；<br>下表是给出了对<a href="http://store.company.com/dir/page.html" target="_blank" rel="noopener">http://store.company.com:80</a>的同源检测：<br>| URL | 结果 | 原因 |<br>| — | — | — |<br>|<a href="http://store.company.com/dir/inner/another.html" target="_blank" rel="noopener">http://store.company.com/dir/inner/another.html</a> | 成功 | 同一域名 |<br>|<a href="http://store.company.com/dir2/other.html" target="_blank" rel="noopener">http://store.company.com/dir2/other.html</a> | 成功 | 同一域名下不同文件夹 |<br>|<a href="https://store.company.com/secure.html" target="_blank" rel="noopener">https://store.company.com/secure.html</a> | 失败 | 不同的协议 ( https ) |<br>|<a href="http://store.company.com:81/dir/etc.html|" target="_blank" rel="noopener">http://store.company.com:81/dir/etc.html|</a> 失败 | 不同的端口 ( 81 ) |<br>|<a href="http://news.company.com/dir/other.html" target="_blank" rel="noopener">http://news.company.com/dir/other.html</a> | 失败 | 主域相同，子域不同( news ) |<br>|<a href="http://news.company.com/dir/other.html" target="_blank" rel="noopener">http://news.company.com/dir/other.html</a>  | 失败 | 域名不同 |</p>
 <h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="主域相同的跨域"><a href="#主域相同的跨域" class="headerlink" title="主域相同的跨域"></a>主域相同的跨域</h3><p> <code>document.domain</code> + <code>iframe</code> 实现跨域</p>
 <h3 id="完全不同源的跨域（两个页面之间的通信）"><a href="#完全不同源的跨域（两个页面之间的通信）" class="headerlink" title="完全不同源的跨域（两个页面之间的通信）"></a>完全不同源的跨域（两个页面之间的通信）</h3><ol>
 <li>通过<code>location.hash</code>跨域</li>
@@ -829,6 +793,28 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 16
@@ -943,15 +929,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
-        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
-    
-        <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
-    
         <span class="sidebar-tag-name" data-tags="计算机网络"><span class="iconfont-archer">&#xe606;</span>计算机网络</span>
     
         <span class="sidebar-tag-name" data-tags="webpack"><span class="iconfont-archer">&#xe606;</span>webpack</span>
     
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+    
         <span class="sidebar-tag-name" data-tags="Hexo"><span class="iconfont-archer">&#xe606;</span>Hexo</span>
+    
+        <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
     
         <span class="sidebar-tag-name" data-tags="前端"><span class="iconfont-archer">&#xe606;</span>前端</span>
     
