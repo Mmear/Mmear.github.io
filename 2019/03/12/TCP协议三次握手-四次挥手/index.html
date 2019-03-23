@@ -403,7 +403,7 @@ height:50vh;
     <article class="article-entry">
         <h1 id="TCP协议中的『三次握手』与『四次挥手』"><a href="#TCP协议中的『三次握手』与『四次挥手』" class="headerlink" title="TCP协议中的『三次握手』与『四次挥手』"></a>TCP协议中的『三次握手』与『四次挥手』</h1><h2 id="TCP-IP-参考模型"><a href="#TCP-IP-参考模型" class="headerlink" title="TCP/IP 参考模型"></a>TCP/IP 参考模型</h2><p>TCP 协议属于著名的<code>TCP/IP 参考模型</code>，被全球范围内的互联网所使用，该模型从上至下分为『应用层』『传输层』『网络层/互联网层』『数据链路层』，相较于它的原型七层 <code>OSI 参考模型</code>少了『表示层』『会话层』以及『物理层』；</p>
 <p> TCP (Transport Control Protocol)即传输控制协议是一个<strong>可靠的、面向连接</strong>的协议，位于 TCP/IP 模型的第二层『传输层』，该层定义了两个<strong>端到端</strong>的传输协议，设计目标是允许源主机与目标主机上的对等实体进行对话；同样位于该层的还有用户数据报协议（UDP，User Datagram Protocol），该协议是无连接且不可靠的协议，一般用于语音和视频传输；</p>
-<p><img src="tcpip.png" alt="TCPIP"></p>
+<img src="/2019/03/12/TCP协议三次握手-四次挥手/tcpip.png" title="This is a test image">
 <h2 id="TCP-报文信息"><a href="#TCP-报文信息" class="headerlink" title="TCP 报文信息"></a>TCP 报文信息</h2><p>TCP 的<strong>头部报文</strong>结构如下：</p>
 <p><img src="https://user-gold-cdn.xitu.io/2018/12/5/1677d4e5cbe9cba6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="TCPHEADER"><br><a href="https://user-gold-cdn.xitu.io/2018/12/5/1677d4e5cbe9cba6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" target="_blank" rel="noopener">图片来源</a></p>
 <ul>
@@ -418,7 +418,7 @@ height:50vh;
 <li><p>『控制位』<code>标志位</code>，常见的有 SYN、ACK、FIN、RST 等；表明各种了下一步通信双方应该进行的动作；如 FIN 表明执行断开连接操作，SYN 表示开始连接操作并设置初始 seq 值 等；</p>
 </li>
 </ul>
-<h2 id="建立连接『三次握手』"><a href="#建立连接『三次握手』" class="headerlink" title="建立连接『三次握手』"></a>建立连接『三次握手』</h2><p><img src="shakehand.png" alt="shakehand"></p>
+<h2 id="建立连接『三次握手』"><a href="#建立连接『三次握手』" class="headerlink" title="建立连接『三次握手』"></a>建立连接『三次握手』</h2><img src="/2019/03/12/TCP协议三次握手-四次挥手/shakehand.png" title="This is a test image">
 <p>如图所示，对百度首页进行一次访问，用 wireshark 捕获的 TCP 包中的前三个完整表示了一次 TCP 协议建立连接的流程；   </p>
 <ol>
 <li><p>客户端向服务器发送建立连接请求包，将 SYN 标志位设置为 1，同时设置起始序号 seq=0，并附带滑动窗口大小（win），希望接受的数据包长度（len），能接受的最大包大小（mss）；可以简单表示为<code>SYN(seq=0)</code> <em>mss，Maximum Segment Size： 除去头部后，一个网络包所能容纳的 最大 TCP 数据长度</em></p>
@@ -444,7 +444,7 @@ height:50vh;
 <h3 id="目的-1"><a href="#目的-1" class="headerlink" title="目的"></a>目的</h3><p>四次挥手是因为数据传输的不同步，一方已经传送完数据了，但另一方还没有，于是先接受数据并回复，等到剩余数据准备好再发送 FIN，并等待 ACK 确认以保证双方数据都传输完毕； </p>
 <p>至于最后的<code>TIME_WAIT</code>状态，是为了防止最后的 ACK 包丢失，导致对方重发 FIN 但无人回应，甚至中断其它正常套接字的情况；经过最大报文文段生存时间后，即认为对方已经收到了；</p>
 <h2 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h2><p>最简单的一问一答形式（等到 ACK 回应后，再发送数据）叫做『单工停等协议』，这种同步方式虽然保证了数据传输的有序和完整，但效率实在低下；为了解决这个问题，TCP 协议采用了滑动窗口协议来<strong>管理数据发送和 ACK 号</strong>的操作。滑动窗口，即不用等待上一个包的 ACK 确认，就直接发送<strong>后续的一系列</strong>包；</p>
-<p><img src="window_1.png" alt="window_1"></p>
+<img src="/2019/03/12/TCP协议三次握手-四次挥手/window_1.png" title="This is a test image">
 <p>窗口由16位bit所定义，所以接收端的 TCP 窗口能最大提供65535个字节的缓冲，滑动窗口主要就是做限流和缓冲用的；如图，可以看见有三个连续的 ack=518 的包被发送，而 seq 则是不断增大的，说明 A 向 B 连续发送了三个数据包，只要 B 的滑动窗口还有空间，就可以继续连续发送数据包；</p>
 <p>B 在接收到突然的数据后可能来不及处理，便会发送对应的连续 ACK ，告知自己滑动窗口的变化， 当 B 处理完缓冲区的数据后，会向 A 发出一个<code>WINDOW_UPDATE</code>包，告知 A 自己的窗口大小已经增大；</p>
 <p><img src="https://user-gold-cdn.xitu.io/2018/12/5/1677d7f11f57f146?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></p>
@@ -792,14 +792,6 @@ top:50vh;
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 16
@@ -914,9 +906,9 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
-        <span class="sidebar-tag-name" data-tags="计算机网络"><span class="iconfont-archer">&#xe606;</span>计算机网络</span>
-    
         <span class="sidebar-tag-name" data-tags="webpack"><span class="iconfont-archer">&#xe606;</span>webpack</span>
+    
+        <span class="sidebar-tag-name" data-tags="计算机网络"><span class="iconfont-archer">&#xe606;</span>计算机网络</span>
     
         <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
