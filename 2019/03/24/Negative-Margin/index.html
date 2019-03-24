@@ -272,7 +272,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">909</span>阅读时长: <span class="post-count reading-time">3 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">912</span>阅读时长: <span class="post-count reading-time">3 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -409,15 +409,14 @@ height:50vh;
 <img src="/2019/03/24/Negative-Margin/layout.png" title="This is a test image">
 <p>简要概括一下的话，主要通过以下几个方面来实现:</p>
 <ul>
-<li>父元素<code>content</code>下的所有子元素即<code>middle`</code>left<code></code>right`全部左浮动；</li>
-<li><code>middle</code>宽度设置为 100%，此时它独占一行，<code>left`</code>right<code>因为宽度固定，全部紧靠在第二行左边缘，上边缘紧贴</code>middle`下边缘；</li>
+<li>父元素<code>content</code>下的所有子元素即<code>middle</code> <code>left</code> <code>right</code>全部左浮动；</li>
+<li><code>middle</code>宽度设置为 100%，此时它独占一行，<code>left</code> <code>right</code>因为宽度固定，全部紧靠在第二行左边缘，上边缘紧贴<code>middle</code>下边缘；</li>
 <li>这时给<code>left</code>一个<code>margin-left: -100%</code>，会将<code>left</code>拉出第二行，此时因为不受<code>middle</code>上边缘限制，会直接移动到第一行最左边；</li>
 <li>同理给<code>right</code>一个<code>margin-right: -200px</code>，会将<code>right</code>拉到第一行的最右边；(可以理解为先到第一行后，再进行向左拉动)</li>
-<li>因为此时<code>middle</code>被覆盖，给父元素设置左右 <code>padding</code>，再让<code>left`</code>right<code>分别设置</code>position: relative<code>，用</code>left: -200px<code></code>right: -200px<code>将它们拉出</code>middle` 范围内；</li>
+<li>因为此时<code>middle</code>被覆盖，给父元素设置左右 <code>padding</code>，再让<code>left</code> <code>right</code>分别设置<code>position: relative</code>，用<code>left: -200px</code> <code>right: -200px</code>将它们拉出 <code>middle</code> 范围内；</li>
 </ul>
 <h3 id="标准流-通常流-Normal-flow"><a href="#标准流-通常流-Normal-flow" class="headerlink" title="标准流/通常流(Normal flow)"></a>标准流/通常流(Normal flow)</h3><p>负边距(Negative margin)的工作特性，与 CSS 文档流有很大关系，在可视化模型中，一切元素都能表示为框/盒模型，而<strong>所有的框都处于流动状态</strong>；在标准流中，主要的流向是从右下 往 左上，即类似『↖』的方向；其中的框分为<code>块级上下文</code>与<code>行内级上下文</code>，也就是通常说的块级元素与行内元素；</p>
 <p>对于块级上下文，它通常是占满一行的宽度，从上到下依次排列；即如果没有给它设置宽度，那它的宽度便为『填充』，而垂直方向则是占据内容的最大高度；</p>
-<p><img src="https://images2015.cnblogs.com/blog/1026992/201611/1026992-20161103092825471-364427888.png" alt="t"></p>
 <h4 id="负边距"><a href="#负边距" class="headerlink" title="负边距"></a>负边距</h4><p><img src="http://www.daqianduan.com/wp-content/uploads/2015/11/5637680cc060c_articlex.gif" alt="5637680cc060c_articlex"></p>
 <p>再来谈谈负边距的作用，对于 CSS 盒模型来说，一个未定义宽度的块级盒子的总宽度应该为<code>margin + border + padding + width = 父元素的width</code>，如果<code>width</code>未指定，会自动让其『填充』；如果指定了宽度，则会用水平的<code>margin</code>来补全，这也是通常说的『元素定宽加<code>margin: 0 auto</code>实现水平居中』的原理；然而这些都是<code>margin</code>为正时的情况；</p>
 <p>当<code>margin</code>为负时，如果<strong>宽度指定</strong>，<code>margin-right</code>不会产生影响，<code>margin-left</code>会将元素往左拉动；如果宽度已未指定(auto)，二者都会将元素<strong>宽度往对应方向增大</strong>；</p>
@@ -782,22 +781,6 @@ top:50vh;
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 17
@@ -919,15 +902,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
-        <span class="sidebar-tag-name" data-tags="计算机网络"><span class="iconfont-archer">&#xe606;</span>计算机网络</span>
-    
-        <span class="sidebar-tag-name" data-tags="webpack"><span class="iconfont-archer">&#xe606;</span>webpack</span>
-    
         <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
         <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
     
+        <span class="sidebar-tag-name" data-tags="webpack"><span class="iconfont-archer">&#xe606;</span>webpack</span>
+    
         <span class="sidebar-tag-name" data-tags="Hexo"><span class="iconfont-archer">&#xe606;</span>Hexo</span>
+    
+        <span class="sidebar-tag-name" data-tags="计算机网络"><span class="iconfont-archer">&#xe606;</span>计算机网络</span>
     
         <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
     
