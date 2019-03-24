@@ -417,8 +417,9 @@ height:50vh;
 </ul>
 <h3 id="标准流-通常流-Normal-flow"><a href="#标准流-通常流-Normal-flow" class="headerlink" title="标准流/通常流(Normal flow)"></a>标准流/通常流(Normal flow)</h3><p>负边距(Negative margin)的工作特性，与 CSS 文档流有很大关系，在可视化模型中，一切元素都能表示为框/盒模型，而<strong>所有的框都处于流动状态</strong>；在标准流中，主要的流向是从右下 往 左上，即类似『↖』的方向；其中的框分为<code>块级上下文</code>与<code>行内级上下文</code>，也就是通常说的块级元素与行内元素；</p>
 <p>对于块级上下文，它通常是占满一行的宽度，从上到下依次排列；即如果没有给它设置宽度，那它的宽度便为『填充』，而垂直方向则是占据内容的最大高度；</p>
-<p><img src="https://images2015.cnblogs.com/blog/1026992/201611/1026992-20161103092825471-364427888.png" alt=""></p>
-<h4 id="负边距"><a href="#负边距" class="headerlink" title="负边距"></a>负边距</h4><p>再来谈谈负边距的作用，对于 CSS 盒模型来说，一个未定义宽度的块级盒子的总宽度应该为<code>margin + border + padding + width = 父元素的width</code>，如果<code>width</code>未指定，会自动让其『填充』；如果指定了宽度，则会用水平的<code>margin</code>来补全，这也是通常说的『元素定宽加<code>margin: 0 auto</code>实现水平居中』的原理；然而这些都是<code>margin</code>为正时的情况；</p>
+<p><img src="https://images2015.cnblogs.com/blog/1026992/201611/1026992-20161103092825471-364427888.png" alt="t"></p>
+<h4 id="负边距"><a href="#负边距" class="headerlink" title="负边距"></a>负边距</h4><p><img src="http://www.daqianduan.com/wp-content/uploads/2015/11/5637680cc060c_articlex.gif" alt="5637680cc060c_articlex"></p>
+<p>再来谈谈负边距的作用，对于 CSS 盒模型来说，一个未定义宽度的块级盒子的总宽度应该为<code>margin + border + padding + width = 父元素的width</code>，如果<code>width</code>未指定，会自动让其『填充』；如果指定了宽度，则会用水平的<code>margin</code>来补全，这也是通常说的『元素定宽加<code>margin: 0 auto</code>实现水平居中』的原理；然而这些都是<code>margin</code>为正时的情况；</p>
 <p>当<code>margin</code>为负时，如果<strong>宽度指定</strong>，<code>margin-right</code>不会产生影响，<code>margin-left</code>会将元素往左拉动；如果宽度已未指定(auto)，二者都会将元素<strong>宽度往对应方向增大</strong>；</p>
 <img src="/2019/03/24/Negative-Margin/ng-margin_1.png" title="This is a test image">
 <p>这种现象的产生都是因为要满足之前提到的块级上下文宽度等式，一旦产生负值，那必定要产生一个正值来抵消，当宽度指定时，只能通过另一边的 <code>margin</code>来抵消(如果两边都指定了，<code>margin-right</code>会被无视)； 当宽度未指定时，可以通过扩大宽度来抵消；</p>
@@ -426,7 +427,6 @@ height:50vh;
 <p>上图即为定宽元素产生自动产生的<code>margin-right</code>,以此来维持等式平衡</p>
 <p>垂直方向的<code>margin</code>只会导致位置的移动，因为元素在垂直方向并不会有『填充』的特性；当然因为标准流是从下往上的，所以<code>marin-top</code>会将元素本身往上拉动<strong>覆盖</strong>上方元素，<code>margin-bottom</code>会将后方的元素往上拉动并覆盖自己；</p>
 <img src="/2019/03/24/Negative-Margin/ng-margin_2.png" title="This is a test image">
-<p><img src="http://www.daqianduan.com/wp-content/uploads/2015/11/5637680cc060c_articlex.gif" alt="5637680cc060c_articlex"></p>
 
     </article>
     <!-- license  -->
@@ -913,9 +913,9 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="JavaScript"><span class="iconfont-archer">&#xe606;</span>JavaScript</span>
-    
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
+    
+        <span class="sidebar-tag-name" data-tags="JavaScript"><span class="iconfont-archer">&#xe606;</span>JavaScript</span>
     
         <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
