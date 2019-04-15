@@ -272,7 +272,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">838</span>阅读时长: <span class="post-count reading-time">3 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">1k</span>阅读时长: <span class="post-count reading-time">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -401,7 +401,9 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h2 id="Webpack-中的模块有哪些"><a href="#Webpack-中的模块有哪些" class="headerlink" title="Webpack 中的模块有哪些?"></a>Webpack 中的模块有哪些?</h2><ul>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><strong>Tree shaking</strong>是对指模块打包时通过一定方案将模块中无用的代码给剔除, 达到减少代码体积, 加快加载速度的目的;<br>Tree Shaking 在前端界由 rollup 首先提出并实现，Webpack 在 2.x 版本也借助于 UglifyJS 实现了;</p>
+<p>在指定了构建环境为生产环境(mode: ‘production’)后, Webpack 会自动执行 tree shaking 和代码压缩等流程, 减少输出 bundle 的体积;</p>
+<h2 id="Webpack-中的模块有哪些"><a href="#Webpack-中的模块有哪些" class="headerlink" title="Webpack 中的模块有哪些?"></a>Webpack 中的模块有哪些?</h2><ul>
 <li>ES6 <code>import</code>语句</li>
 <li>CommonJS <code>require()</code>语句</li>
 <li>AMD <code>define</code>和<code>require</code>语句</li>
@@ -432,10 +434,11 @@ height:50vh;
 <img src="/2019/04/15/Tree-shaking-in-Webpack/treeshaking.png" title="Tree shaking success">
 <h4 id="polyfill"><a href="#polyfill" class="headerlink" title="polyfill"></a>polyfill</h4><p>类似 <code>@babel/polyfill</code> 这类垫片库也是产生副作用的对象, 它们并没有直接地暴露 <code>export</code>, 但会在导入时执行特殊代码, 对全局作用域产生影响(比如为 Array.prototype 挂载新方法, shim 一个 Promise 类等); 然而 Webpack 的 tree shaking 机制并不能判断这个:</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// polyfill.js</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"@babel/polyfill"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// main.js</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"./polyfill.js"</span></span><br></pre></td></tr></table></figure>
-<p>如果没有在<code>package.json</code>的<code>sideEffects</code>属性中指明会产生副作用的文件, 打包时会自动将 polyfill.js 的内容筛去; 所以要明确指定会产生副作用的文件:</p>
+<p>上述的文件, Webpack 在打包后会自动将 polyfill.js 的内容删去, 因为 Webpack 判断其并没有<code>export</code>, 自然理解为无用代码;</p>
+<p>解决方法是在<code>package.json</code>的<code>sideEffects</code>属性中指明会产生副作用的文件(或者在 Option.rules 中指定), 注意如果通过<code>css-loader</code>来辅助导入 css 模块时(如 <code>import &#39;main.css&#39;</code>), 也要将其指定为副作用文件, 否则 Webpack tree shaking 对其也会生效;</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">"sideEffects": [</span><br><span class="line">  "./src/polyfill.js",</span><br><span class="line">  <span class="string">"*.@(css|sass|scss)"</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
-<li>不同条件下 tree shaking 的情况:<ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>不同条件下 tree shaking 的情况:</p>
+<ul>
 <li>Tree shaking 只会对采用 ES6 Module 规范的模块生效</li>
 <li>Tree shaking 对会产生副作用的模块不能准确识别, 无法筛去:<ul>
 <li>尽量编写无副作用的函数</li>
@@ -446,8 +449,7 @@ height:50vh;
 </ul>
 </li>
 </ul>
-</li>
-</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://segmentfault.com/a/1190000012794598#articleHeader0" target="_blank" rel="noopener">你的Tree-Shaking并没什么卵用</a><br><a href="https://juejin.im/post/5a4dc842518825698e7279a9" target="_blank" rel="noopener">Tree-Shaking性能优化实践 - 原理篇</a></p>
 
     </article>
     <!-- license  -->
@@ -455,6 +457,11 @@ height:50vh;
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2019/04/15/Module-in-Webpack/" title="Webpack 模块历险🚌">
+                    <div class="nextTitle">Webpack 模块历险🚌</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -605,7 +612,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Webpack-中的模块有哪些"><span class="toc-number">1.</span> <span class="toc-text">Webpack 中的模块有哪些?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Webpack-的-tree-shaking-优化机制"><span class="toc-number">2.</span> <span class="toc-text">Webpack 的 tree shaking 优化机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#副作用-side-effects"><span class="toc-number">2.1.</span> <span class="toc-text">副作用(side-effects)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#polyfill"><span class="toc-number">2.1.1.</span> <span class="toc-text">polyfill</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">2.2.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Webpack-中的模块有哪些"><span class="toc-number">2.</span> <span class="toc-text">Webpack 中的模块有哪些?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Webpack-的-tree-shaking-优化机制"><span class="toc-number">3.</span> <span class="toc-text">Webpack 的 tree shaking 优化机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#副作用-side-effects"><span class="toc-number">3.1.</span> <span class="toc-text">副作用(side-effects)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#polyfill"><span class="toc-number">3.1.1.</span> <span class="toc-text">polyfill</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -860,14 +867,9 @@ top:50vh;
     
     
     
-    
-    
-    
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 19
+        Total : 20
         </div>
         <!-- search  -->
         
@@ -880,6 +882,11 @@ top:50vh;
     
     <div class="archive-year"> 2019 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/15</span><a class="archive-post-title" href="/2019/04/15/Module-in-Webpack/">Webpack 模块历险🚌</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -990,17 +997,17 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="JavaScript"><span class="iconfont-archer">&#xe606;</span>JavaScript</span>
-    
         <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+    
+        <span class="sidebar-tag-name" data-tags="JavaScript"><span class="iconfont-archer">&#xe606;</span>JavaScript</span>
     
         <span class="sidebar-tag-name" data-tags="Git"><span class="iconfont-archer">&#xe606;</span>Git</span>
     
-        <span class="sidebar-tag-name" data-tags="计算机网络"><span class="iconfont-archer">&#xe606;</span>计算机网络</span>
+        <span class="sidebar-tag-name" data-tags="Webpack"><span class="iconfont-archer">&#xe606;</span>Webpack</span>
     
         <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
-        <span class="sidebar-tag-name" data-tags="Webpack"><span class="iconfont-archer">&#xe606;</span>Webpack</span>
+        <span class="sidebar-tag-name" data-tags="计算机网络"><span class="iconfont-archer">&#xe606;</span>计算机网络</span>
     
         <span class="sidebar-tag-name" data-tags="vue"><span class="iconfont-archer">&#xe606;</span>vue</span>
     
