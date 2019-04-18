@@ -272,7 +272,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">1k</span>阅读时长: <span class="post-count reading-time">4 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">1.3k</span>阅读时长: <span class="post-count reading-time">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -402,7 +402,10 @@ height:50vh;
             <main class="main post-page">
     <article class="article-entry">
         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><strong>Tree shaking</strong>是对指模块打包时通过一定方案将模块中无用的代码给剔除, 达到减少代码体积, 加快加载速度的目的;<br>Tree Shaking 在前端界由 rollup 首先提出并实现，Webpack 在 2.x 版本也借助于 UglifyJS 实现了;</p>
-<p>在指定了构建环境为生产环境(mode: ‘production’)后, Webpack 会自动执行 tree shaking 和代码压缩等流程, 减少输出 bundle 的体积;</p>
+<blockquote>
+<p>Tree-shaking 的本质是消除无用的 js 代码。无用代码消除在广泛存在于传统的编程语言编译器中，编译器可以判断出某些代码根本不影响输出，然后消除这些代码，这个称之为 DCE（dead code elimination）。<br>Tree-shaking 是 DCE 的一种新的实现，Javascript 同传统的编程语言不同的是，javascript 绝大多数情况需要通过网络进行加载，然后执行，加载的文件大小越小，整体执行时间更短，所以去除无用代码以减少文件体积，对 javascript 来说更有意义。</p>
+</blockquote>
+<p>作者：百度外卖大前端技术团队<br>链接：<a href="https://juejin.im/post/5a4dc842518825698e7279a9" target="_blank" rel="noopener">https://juejin.im/post/5a4dc842518825698e7279a9</a><br>来源：掘金<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。<br>在指定了构建环境为生产环境(mode: ‘production’)后, Webpack 会自动执行 tree shaking 和代码压缩等流程, 减少输出 bundle 的体积;</p>
 <h2 id="Webpack-中的模块有哪些"><a href="#Webpack-中的模块有哪些" class="headerlink" title="Webpack 中的模块有哪些?"></a>Webpack 中的模块有哪些?</h2><ul>
 <li>ES6 <code>import</code>语句</li>
 <li>CommonJS <code>require()</code>语句</li>
@@ -423,7 +426,7 @@ height:50vh;
 <p>如果符合以上条件, 这个函数便成为纯函数, 否则就认为这个函数会产生<strong>副作用</strong>, 是不纯的;</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> _ <span class="keyword">from</span> <span class="string">'lodash-es'</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pure</span> (<span class="params">value</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Boolean</span>(value);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">impure</span> (<span class="params">col, fn</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 依赖外部环境</span></span><br><span class="line"> <span class="keyword">return</span>  _.partition(col, fn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>而带有副作用的函数, 即使是无用的, 也会影响 Webpack 的 tree shaking;</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// module.js</span></span><br><span class="line"><span class="comment">// 注意不能使用'lodash'包来测试, 因为lodash采用的是CommonJS规范, webpack的tree shaking对其无效</span></span><br><span class="line"><span class="comment">// 这里使用的'lodash-es'内部采用ES6 Module规范</span></span><br><span class="line"><span class="keyword">import</span> _ <span class="keyword">from</span> <span class="string">"lodash-es"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> useful = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"An exactly useful module."</span>);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> useless = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">//! 这里引入了lodash库, 导致不纯</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">typeof</span> _.partition);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"An exactly useless and impure module."</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// module.js</span></span><br><span class="line"><span class="comment">// 注意不能使用 'lodash' 包来测试, 因为 lodash 采用的是 CommonJS 规范, webpack 的 tree shaking对其无效</span></span><br><span class="line"><span class="comment">// 这里使用的 'lodash-es' 内部采用 ES6 Module规范</span></span><br><span class="line"><span class="keyword">import</span> _ <span class="keyword">from</span> <span class="string">"lodash-es"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> useful = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"An exactly useful module."</span>);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> useless = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">//! 这里引入了 lodash库, 导致不纯</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">typeof</span> _.partition);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"An exactly useless and impure module."</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; useful &#125; <span class="keyword">from</span> <span class="string">"./module.js"</span>;</span><br><span class="line">useful();</span><br></pre></td></tr></table></figure>
 <p>执行打包后的结果:</p>
 <img src="/2019/04/15/Tree-shaking-in-Webpack/build.png" title="Tree shaking failed">
@@ -449,7 +452,7 @@ height:50vh;
 </ul>
 </li>
 </ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://segmentfault.com/a/1190000012794598#articleHeader0" target="_blank" rel="noopener">你的Tree-Shaking并没什么卵用</a><br><a href="https://juejin.im/post/5a4dc842518825698e7279a9" target="_blank" rel="noopener">Tree-Shaking性能优化实践 - 原理篇</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://segmentfault.com/a/1190000012794598#articleHeader0" target="_blank" rel="noopener">你的 Tree-Shaking 并没什么卵用</a><br><a href="https://juejin.im/post/5a4dc842518825698e7279a9" target="_blank" rel="noopener">Tree-Shaking 性能优化实践 - 原理篇</a><br><a href="https://juejin.im/post/5b8ce49df265da438151b468" target="_blank" rel="noopener">如何更好使用 webpack tree-shaking</a></p>
 
     </article>
     <!-- license  -->
@@ -863,9 +866,24 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 20
+        Total : 21
         </div>
         <!-- search  -->
         
@@ -878,6 +896,11 @@ top:50vh;
     
     <div class="archive-year"> 2019 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/18</span><a class="archive-post-title" href="/2019/04/18/Promise-implement/">PromiseA+ 规范实现 Promise 🚌</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1007,9 +1030,9 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Webpack"><span class="iconfont-archer">&#xe606;</span>Webpack</span>
     
-        <span class="sidebar-tag-name" data-tags="Hexo"><span class="iconfont-archer">&#xe606;</span>Hexo</span>
-    
         <span class="sidebar-tag-name" data-tags="Vue"><span class="iconfont-archer">&#xe606;</span>Vue</span>
+    
+        <span class="sidebar-tag-name" data-tags="Hexo"><span class="iconfont-archer">&#xe606;</span>Hexo</span>
     
         <span class="sidebar-tag-name" data-tags="HTTP"><span class="iconfont-archer">&#xe606;</span>HTTP</span>
     
